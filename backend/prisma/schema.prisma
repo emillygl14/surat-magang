@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id           String      @id @default(cuid())
+  nama         String
+  email        String      @unique
+  password     String
+  role         Role        @default(MAHASISWA)
+  nim          String?     @unique
+  noHp         String?
+  programStudi String?
+  fotoProfil   String?
+  createdAt    DateTime    @default(now())
+  pengajuan    Pengajuan[]
+}
+
+model Pengajuan {
+  id               String   @id @default(cuid())
+  userId           String
+  user             User     @relation(fields: [userId], references: [id])
+  jenisSurat       String
+  namaPerusahaan   String
+  alamatPerusahaan String
+  tanggalMulai     DateTime
+  tanggalSelesai   DateTime
+  keperluan        String
+  filePendukung    String?
+  status           Status   @default(PENDING)
+  catatan          String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model JenisSurat {
+  id        String   @id @default(cuid())
+  nama      String   @unique
+  createdAt DateTime @default(now())
+}
+
+model Setting {
+  id          String   @id @default(cuid())
+  namaAplikasi String  @default("Sistem Pengajuan Surat Magang")
+  logoJurusan  String?
+  infoKontak   String?
+  updatedAt   DateTime @updatedAt
+}
+
+enum Role {
+  MAHASISWA
+  ADMIN
+}
+
+enum Status {
+  PENDING
+  DISETUJUI
+  DITOLAK
+}
