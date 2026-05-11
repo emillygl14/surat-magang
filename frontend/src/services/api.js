@@ -10,13 +10,18 @@ api.interceptors.request.use((config) => {
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+  console.log(`Request: ${config.method.toUpperCase()} ${config.url}`);
   return config;
 });
 
 // Redirect ke login jika token expired/invalid
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    console.log(`Response: ${response.status} ${response.config.url}`);
+    return response;
+  },
   (error) => {
+    console.error(`API Error: ${error.message}`, error.response?.data);
     if (error.response?.status === 401) {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
