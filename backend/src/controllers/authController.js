@@ -175,10 +175,14 @@ const updateProfile = async (req, res) => {
       },
     });
 
+    console.log("Profile updated successfully for user:", userId);
     res.json({ message: "Profil berhasil diperbarui", user });
   } catch (error) {
     console.error("Update Profile Error:", error);
-    res.status(500).json({ message: "Server error", error: error.message });
+    res.status(500).json({
+      message: "Server error saat memperbarui profil",
+      error: error.message,
+    });
   }
 };
 
