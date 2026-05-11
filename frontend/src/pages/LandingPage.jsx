@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import bgImage from "../assets/bg-landingpage.jpg";
+import iluJurusan from "../assets/jurusan-elektro.png";
 import { FiInfo, FiBookOpen, FiArrowRight, FiMenu, FiX } from "react-icons/fi";
 import { useState, useEffect } from "react";
 
@@ -224,8 +225,11 @@ export default function LandingPage() {
                 ))}
               </div>
             </div>
-            <div className="bg-gray-100 rounded-3xl h-80 flex items-center justify-center text-gray-400 border-2 border-dashed border-gray-300">
-              <span className="text-sm font-medium">Ilustrasi Jurusan</span>
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+              <div className="relative bg-white rounded-3xl overflow-hidden shadow-2xl h-80 border border-gray-100">
+                <img src={iluJurusan} alt="Teknik Elektro Polimdo" className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500" />
+              </div>
             </div>
           </div>
         </div>
