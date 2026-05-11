@@ -21,7 +21,7 @@ app.use((req, res, next) => {
   console.log(`${req.method} ${req.url}`);
   next();
 });
-app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+app.use("/uploads", express.static(path.resolve(__dirname, "../uploads")));
 
 app.get("/", (req, res) => {
   res.json({ message: "API Surat Magang berjalan!" });
