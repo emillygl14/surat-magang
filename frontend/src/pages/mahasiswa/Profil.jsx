@@ -67,7 +67,7 @@ export default function Profil() {
             <p className="text-sm font-semibold text-gray-900">{user?.nama}</p>
             <p className="text-xs text-gray-500">{user?.nim}</p>
           </div>
-          <img src={user?.fotoProfil ? `http://localhost:5000${user.fotoProfil}` : `https://ui-avatars.com/api/?name=${user?.nama}`} alt="Profile" className="w-9 h-9 rounded-full object-cover" />
+          <img src={user?.fotoProfil ? `${import.meta.env.VITE_FILE_URL}${user.fotoProfil}` : `https://ui-avatars.com/api/?name=${user?.nama}`} alt="Profile" className="w-9 h-9 rounded-full object-cover" />
         </div>
       </header>
 
@@ -83,7 +83,7 @@ export default function Profil() {
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="flex items-center gap-4 mb-4">
-              <img src={file ? URL.createObjectURL(file) : (user?.fotoProfil ? `http://localhost:5000${user.fotoProfil}` : `https://ui-avatars.com/api/?name=${user?.nama}`)} alt="Profile Preview" className="w-20 h-20 rounded-full object-cover border border-gray-200" />
+              <img src={file ? URL.createObjectURL(file) : (user?.fotoProfil ? `${import.meta.env.VITE_FILE_URL}${user.fotoProfil}` : `https://ui-avatars.com/api/?name=${user?.nama}`)} alt="Profile Preview" className="w-20 h-20 rounded-full object-cover border border-gray-200" />
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Ganti Foto Profil</label>
                 <input type="file" onChange={(e) => setFile(e.target.files[0])} accept="image/*" className="text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />

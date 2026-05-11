@@ -13,7 +13,7 @@ export default function Panduan() {
             <p className="text-sm font-semibold text-gray-900">{user?.nama}</p>
             <p className="text-xs text-gray-500">{user?.nim}</p>
           </div>
-          <img src={user?.fotoProfil ? `http://localhost:5000${user.fotoProfil}` : `https://ui-avatars.com/api/?name=${user?.nama}`} alt="Profile" className="w-9 h-9 rounded-full object-cover" />
+          <img src={user?.fotoProfil ? `${import.meta.env.VITE_FILE_URL}${user.fotoProfil}` : `https://ui-avatars.com/api/?name=${user?.nama}`} alt="Profile" className="w-9 h-9 rounded-full object-cover" />
         </div>
       </header>
 

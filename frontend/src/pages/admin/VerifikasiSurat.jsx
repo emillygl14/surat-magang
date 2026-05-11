@@ -125,7 +125,7 @@ export default function VerifikasiSurat() {
                 <span className="text-gray-500 shrink-0">File Pendukung</span>
                 <span className="text-right">
                   {modal.filePendukung ? (
-                    <a href={`http://localhost:5000${modal.filePendukung}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Lihat File</a>
+                    <a href={`${import.meta.env.VITE_FILE_URL}${modal.filePendukung}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Lihat File</a>
                   ) : "-"}
                 </span>
               </div>

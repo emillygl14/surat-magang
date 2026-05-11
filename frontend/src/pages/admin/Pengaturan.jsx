@@ -81,7 +81,7 @@ export default function Pengaturan() {
                 {logo ? (
                   <img src={URL.createObjectURL(logo)} alt="Logo Preview" className="w-full h-full object-contain" />
                 ) : currentLogo ? (
-                  <img src={`http://localhost:5000${currentLogo}`} alt="Current Logo" className="w-full h-full object-contain" />
+                  <img src={`${import.meta.env.VITE_FILE_URL}${currentLogo}`} alt="Current Logo" className="w-full h-full object-contain" />
                 ) : (
                   <span className="text-gray-400 text-xs text-center px-2">Belum ada logo</span>
                 )}
