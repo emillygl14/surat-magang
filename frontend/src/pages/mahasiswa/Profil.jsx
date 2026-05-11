@@ -60,14 +60,22 @@ export default function Profil() {
 
   return (
     <>
-      <header className="bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between shrink-0">
+      <header className="bg-white border-b border-gray-200 px-8 h-16 flex items-center justify-between shrink-0">
         <h1 className="text-xl font-bold text-gray-900">Profil Saya</h1>
         <div className="flex items-center gap-3">
-          <div className="text-right">
+          <div className="text-right leading-tight">
             <p className="text-sm font-semibold text-gray-900">{user?.nama}</p>
-            <p className="text-xs text-gray-500">{user?.nim}</p>
+            <p className="text-[10px] uppercase tracking-wider font-bold text-gray-400">{user?.nim}</p>
           </div>
-          <img src={user?.fotoProfil ? `${FILE_URL}${user.fotoProfil}` : `https://ui-avatars.com/api/?name=${user?.nama}`} alt="Profile" className="w-9 h-9 rounded-full object-cover" />
+          <img 
+            src={user?.fotoProfil ? `${FILE_URL}${user.fotoProfil}` : `https://ui-avatars.com/api/?name=${user?.nama}&background=0D8ABC&color=fff`} 
+            alt="Profile" 
+            className="w-9 h-9 rounded-full object-cover border border-gray-100"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = `https://ui-avatars.com/api/?name=${user?.nama}&background=0D8ABC&color=fff`;
+            }}
+          />
         </div>
       </header>
 
@@ -83,7 +91,15 @@ export default function Profil() {
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="flex items-center gap-4 mb-4">
-              <img src={file ? URL.createObjectURL(file) : (user?.fotoProfil ? `${FILE_URL}${user.fotoProfil}` : `https://ui-avatars.com/api/?name=${user?.nama}`)} alt="Profile Preview" className="w-20 h-20 rounded-full object-cover border border-gray-200" />
+              <img 
+                src={file ? URL.createObjectURL(file) : (user?.fotoProfil ? `${FILE_URL}${user.fotoProfil}` : `https://ui-avatars.com/api/?name=${user?.nama}&background=0D8ABC&color=fff`)} 
+                alt="Profile Preview" 
+                className="w-20 h-20 rounded-full object-cover border border-gray-200 shadow-sm" 
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = `https://ui-avatars.com/api/?name=${user?.nama}&background=0D8ABC&color=fff`;
+                }}
+              />
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Ganti Foto Profil</label>
                 <input type="file" onChange={(e) => setFile(e.target.files[0])} accept="image/*" className="text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
