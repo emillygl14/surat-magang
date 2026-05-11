@@ -169,7 +169,7 @@ export default function LandingPage() {
                   Jurusan Teknik Elektro
                 </p>
                 <p className="text-xs text-gray-500 mb-3 font-medium">
-                  Politeknik Negeri Indramayu
+                  Politeknik Negeri Manado
                 </p>
                 <p className="text-sm text-gray-600 leading-relaxed mb-4">
                   Jurusan Teknik Elektro berkomitmen mencetak lulusan kompeten

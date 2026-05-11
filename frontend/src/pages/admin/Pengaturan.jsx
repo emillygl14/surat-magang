@@ -5,7 +5,7 @@ import api, { FILE_URL } from "../../services/api";
 export default function Pengaturan() {
   const { user } = useAuth();
   const [form, setForm] = useState({
-    namaAplikasi: "Sistem Pengajuan Surat Magang",
+    namaAplikasi: "Sistem Pengajuan Surat Magang Polimdo",
     infoKontak: "",
   });
   const [logo, setLogo] = useState(null);

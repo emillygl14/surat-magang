@@ -105,7 +105,7 @@ export default function Login() {
           {/* Mobile logo */}
           <div className="lg:hidden mb-8 flex flex-col leading-none">
             <span className="text-gray-500 text-[10px] tracking-widest uppercase">
-              Polindra
+              Polimdo
             </span>
             <span className="text-[#0d1b3e] font-black text-2xl tracking-tight">
               ELEK<span className="text-red-500">/</span>TRO

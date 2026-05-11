@@ -59,7 +59,7 @@ export default function Sidebar({ role, isOpen, onClose }) {
         <div className="px-6 py-6 border-b border-white/10 flex items-center justify-between">
           <div>
             <span className="text-gray-400 text-[9px] tracking-widest uppercase block mb-0.5">
-              Polindra
+              Polimdo
             </span>
             <span className="text-white font-black text-xl tracking-tight">
               ELE<span className="text-red-500">/</span>TRO

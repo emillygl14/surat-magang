@@ -49,14 +49,14 @@ export default function Laporan() {
 
   return (
     <>
-      <header className="bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between shrink-0 print:hidden">
+      <header className="bg-white border-b border-gray-200 px-8 h-16 flex items-center justify-between shrink-0 print:hidden">
         <h1 className="text-xl font-bold text-gray-900">Laporan Pengajuan</h1>
         <div className="flex items-center gap-3">
-          <div className="text-right">
+          <div className="text-right leading-tight">
             <p className="text-sm font-semibold text-gray-900">{user?.nama}</p>
-            <p className="text-xs text-gray-500">Administrator</p>
+            <p className="text-[10px] uppercase tracking-wider font-bold text-gray-400">Administrator</p>
           </div>
-          <img src={`https://ui-avatars.com/api/?name=${user?.nama}&background=0D8ABC&color=fff`} alt="Profile" className="w-9 h-9 rounded-full" />
+          <img src={`https://ui-avatars.com/api/?name=${user?.nama}&background=0D8ABC&color=fff`} alt="Profile" className="w-9 h-9 rounded-full border border-gray-100" />
         </div>
       </header>
 
@@ -92,7 +92,7 @@ export default function Laporan() {
 
           <div className="hidden print:block px-6 py-4 border-b border-gray-900 text-center mb-4">
             <h2 className="text-2xl font-bold">Laporan Pengajuan Surat Magang</h2>
-            <p className="text-sm">Jurusan Teknik Elektro Politeknik Negeri Indramayu</p>
+            <p className="text-sm">Jurusan Teknik Elektro Politeknik Negeri Manado</p>
           </div>
 
           <div className="overflow-x-auto print:overflow-visible">
