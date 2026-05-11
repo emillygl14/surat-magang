@@ -125,20 +125,19 @@ export default function Login() {
 
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* NIM */}
-            <div>
-              <label className="block text-sm font-bold text-[#0d1b3e] mb-2">
-                NIM
+            <div className="space-y-1">
+              <label className="block text-sm font-semibold text-gray-700">
+                NIM atau Email
               </label>
               <div className="relative">
-                <FiUser className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
+                  required
                   value={nim}
                   onChange={(e) => setNim(e.target.value)}
-                  placeholder="Masukkan NIM Anda"
-                  required
-                  className="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-3 text-sm
-                             focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Masukkan NIM atau Email"
+                  className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all outline-none text-gray-700"
                 />
               </div>
             </div>
