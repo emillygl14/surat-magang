@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FiEye, FiX } from "react-icons/fi";
 import { useAuth } from "../../context/AuthContext";
-import api from "../../services/api";
+import api, { FILE_URL } from "../../services/api";
 
 const STATUS_BADGE = {
   PENDING: "bg-yellow-100 text-yellow-700 border border-yellow-200",
@@ -125,7 +125,7 @@ export default function PengajuanSurat() {
                 <span className="text-gray-500 shrink-0">File Pendukung</span>
                 <span className="text-right">
                   {modal.filePendukung ? (
-                    <a href={`${import.meta.env.VITE_FILE_URL}${modal.filePendukung}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Lihat File</a>
+                    <a href={`${FILE_URL}${modal.filePendukung}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Lihat File</a>
                   ) : "-"}
                 </span>
               </div>

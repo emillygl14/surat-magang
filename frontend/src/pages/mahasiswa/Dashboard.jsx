@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FiEye } from "react-icons/fi";
 import { BsFileEarmarkText, BsClock, BsCheckCircle, BsXCircle } from "react-icons/bs";
 import { useAuth } from "../../context/AuthContext";
-import api from "../../services/api";
+import api, { FILE_URL } from "../../services/api";
 
 const STATUS_BADGE = {
   PENDING: "bg-yellow-100 text-yellow-700 border border-yellow-200",
@@ -51,7 +51,7 @@ export default function Dashboard() {
             <p className="text-sm font-semibold text-gray-900">{user?.nama}</p>
             <p className="text-xs text-gray-500">{user?.nim}</p>
           </div>
-          <img src={user?.fotoProfil ? `${import.meta.env.VITE_FILE_URL}${user.fotoProfil}` : `https://ui-avatars.com/api/?name=${user?.nama}`} alt="Profile" className="w-9 h-9 rounded-full object-cover" />
+          <img src={user?.fotoProfil ? `${FILE_URL}${user.fotoProfil}` : `https://ui-avatars.com/api/?name=${user?.nama}`} alt="Profile" className="w-9 h-9 rounded-full object-cover" />
         </div>
       </header>
 

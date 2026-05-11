@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
-import api from "../../services/api";
+import api, { FILE_URL } from "../../services/api";
 
 export default function Pengaturan() {
   const { user } = useAuth();
@@ -81,7 +81,7 @@ export default function Pengaturan() {
                 {logo ? (
                   <img src={URL.createObjectURL(logo)} alt="Logo Preview" className="w-full h-full object-contain" />
                 ) : currentLogo ? (
-                  <img src={`${import.meta.env.VITE_FILE_URL}${currentLogo}`} alt="Current Logo" className="w-full h-full object-contain" />
+                  <img src={`${FILE_URL}${currentLogo}`} alt="Current Logo" className="w-full h-full object-contain" />
                 ) : (
                   <span className="text-gray-400 text-xs text-center px-2">Belum ada logo</span>
                 )}

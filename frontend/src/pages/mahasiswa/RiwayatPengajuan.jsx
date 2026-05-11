@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FiEye, FiX } from "react-icons/fi";
 import { useAuth } from "../../context/AuthContext";
-import api from "../../services/api";
+import api, { FILE_URL } from "../../services/api";
 
 const STATUS_BADGE = {
   PENDING: "bg-yellow-100 text-yellow-700 border border-yellow-200",
@@ -53,7 +53,7 @@ export default function RiwayatPengajuan() {
             <p className="text-sm font-semibold text-gray-900">{user?.nama}</p>
             <p className="text-xs text-gray-500">{user?.nim}</p>
           </div>
-          <img src={user?.fotoProfil ? `${import.meta.env.VITE_FILE_URL}${user.fotoProfil}` : `https://ui-avatars.com/api/?name=${user?.nama}`} alt="Profile" className="w-9 h-9 rounded-full object-cover" />
+          <img src={user?.fotoProfil ? `${FILE_URL}${user.fotoProfil}` : `https://ui-avatars.com/api/?name=${user?.nama}`} alt="Profile" className="w-9 h-9 rounded-full object-cover" />
         </div>
       </header>
 
@@ -129,7 +129,7 @@ export default function RiwayatPengajuan() {
                 <span className="text-gray-500 shrink-0">File Pendukung</span>
                 <span className="text-right">
                   {viewItem.filePendukung ? (
-                    <a href={`${import.meta.env.VITE_FILE_URL}${viewItem.filePendukung}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Lihat File</a>
+                    <a href={`${FILE_URL}${viewItem.filePendukung}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Lihat File</a>
                   ) : "-"}
                 </span>
               </div>

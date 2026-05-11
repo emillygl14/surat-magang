@@ -1,8 +1,11 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
 });
+
+// Derived base URL for files (stripping /api)
+export const FILE_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/api$/, "");
 
 // Otomatis sisipkan token di setiap request
 api.interceptors.request.use((config) => {
