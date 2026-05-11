@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import bgImage from "../assets/bg-landingpage.jpg";
-import { FiInfo, FiBookOpen, FiArrowRight } from "react-icons/fi";
+import { FiInfo, FiBookOpen, FiArrowRight, FiMenu, FiX } from "react-icons/fi";
+import { useState, useEffect } from "react";
 
 function Logo({ size = "md" }) {
   return (
@@ -21,6 +22,17 @@ function Logo({ size = "md" }) {
 }
 
 export default function LandingPage() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const panduanProsedur = [
     "Mahasiswa mencari tempat magang secara mandiri.",
     "Setelah mendapatkan calon perusahaan/instansi, mahasiswa mengirimkan nama tempat magang tersebut kepada panitia.",
@@ -51,8 +63,14 @@ export default function LandingPage() {
         {/* Konten Hero */}
         <div className="relative z-10 flex flex-col h-full">
           {/* Navbar */}
-          <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-4 transition-all duration-300 bg-transparent">
+          <nav
+            className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-4 transition-all duration-300 ${
+              isScrolled || isMenuOpen ? "bg-[#0d1b3e] shadow-lg" : "bg-transparent"
+            }`}
+          >
             <Logo />
+            
+            {/* Desktop Menu */}
             <div className="hidden md:flex items-center gap-8">
               <a
                 href="#beranda"
@@ -79,14 +97,49 @@ export default function LandingPage() {
                 Login
               </Link>
             </div>
-            {/* Mobile login */}
-            <Link
-              to="/login"
-              className="md:hidden bg-[#1e3a8a] text-white text-sm font-medium px-4 py-2 rounded"
+
+            {/* Mobile Menu Toggle */}
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="md:hidden text-white p-2"
             >
-              Login
-            </Link>
+              {isMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+            </button>
           </nav>
+
+          {/* Mobile Menu Overlay */}
+          {isMenuOpen && (
+            <div className="fixed inset-0 z-40 bg-[#0d1b3e] md:hidden pt-24 px-8 flex flex-col gap-6">
+              <a
+                href="#beranda"
+                onClick={() => setIsMenuOpen(false)}
+                className="text-white text-xl font-semibold border-b border-white/10 pb-4"
+              >
+                Beranda
+              </a>
+              <a
+                href="#informasi-jurusan"
+                onClick={() => setIsMenuOpen(false)}
+                className="text-white text-xl font-semibold border-b border-white/10 pb-4"
+              >
+                Informasi Jurusan
+              </a>
+              <a
+                href="#panduan"
+                onClick={() => setIsMenuOpen(false)}
+                className="text-white text-xl font-semibold border-b border-white/10 pb-4"
+              >
+                Panduan
+              </a>
+              <Link
+                to="/login"
+                onClick={() => setIsMenuOpen(false)}
+                className="bg-blue-600 text-white text-center text-xl font-bold py-4 rounded-xl shadow-lg mt-4"
+              >
+                Login ke Akun
+              </Link>
+            </div>
+          )}
 
           {/* Hero Content */}
           <div className="flex-1 flex flex-col justify-center px-8 md:px-16 max-w-3xl">
