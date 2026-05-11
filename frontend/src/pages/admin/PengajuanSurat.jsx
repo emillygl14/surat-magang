@@ -5,12 +5,14 @@ import api, { FILE_URL } from "../../services/api";
 
 const STATUS_BADGE = {
   PENDING: "bg-yellow-100 text-yellow-700 border border-yellow-200",
-  DISETUJUI: "bg-green-100 text-green-700 border border-green-200",
+  PROSES: "bg-blue-100 text-blue-700 border border-blue-200",
+  SELESAI: "bg-green-100 text-green-700 border border-green-200",
   DITOLAK: "bg-red-100 text-red-600 border border-red-200",
 };
 const STATUS_LABEL = {
-  PENDING: "Diproses",
-  DISETUJUI: "Disetujui",
+  PENDING: "Menunggu Verifikasi",
+  PROSES: "Sedang Diproses",
+  SELESAI: "Selesai",
   DITOLAK: "Ditolak",
 };
 

@@ -5,12 +5,14 @@ import api from "../../services/api";
 
 const STATUS_BADGE = {
   PENDING: "bg-yellow-100 text-yellow-700 border border-yellow-200",
-  DISETUJUI: "bg-green-100 text-green-700 border border-green-200",
+  PROSES: "bg-blue-100 text-blue-700 border border-blue-200",
+  SELESAI: "bg-green-100 text-green-700 border border-green-200",
   DITOLAK: "bg-red-100 text-red-600 border border-red-200",
 };
 const STATUS_LABEL = {
-  PENDING: "Diproses",
-  DISETUJUI: "Disetujui",
+  PENDING: "Menunggu Verifikasi",
+  PROSES: "Sedang Diproses",
+  SELESAI: "Selesai",
   DITOLAK: "Ditolak",
 };
 
@@ -34,8 +36,9 @@ export default function Dashboard() {
 
   const counts = {
     total: pengajuan.length,
-    diproses: pengajuan.filter((p) => p.status === "PENDING").length,
-    disetujui: pengajuan.filter((p) => p.status === "DISETUJUI").length,
+    menunggu: pengajuan.filter((p) => p.status === "PENDING").length,
+    diproses: pengajuan.filter((p) => p.status === "PROSES").length,
+    selesai: pengajuan.filter((p) => p.status === "SELESAI").length,
     ditolak: pengajuan.filter((p) => p.status === "DITOLAK").length,
   };
 
@@ -63,9 +66,9 @@ export default function Dashboard() {
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <StatCard label="Total Pengajuan" value={counts.total} desc="Semua pengajuan surat" icon={<BsFileEarmarkText className="w-6 h-6 text-blue-600" />} iconBg="bg-blue-50" />
-          <StatCard label="Diproses" value={counts.diproses} desc="Sedang diproses" icon={<BsClock className="w-6 h-6 text-yellow-600" />} iconBg="bg-yellow-50" />
-          <StatCard label="Disetujui" value={counts.disetujui} desc="Pengajuan disetujui" icon={<BsCheckCircle className="w-6 h-6 text-green-600" />} iconBg="bg-green-50" />
-          <StatCard label="Ditolak" value={counts.ditolak} desc="Pengajuan ditolak" icon={<BsXCircle className="w-6 h-6 text-red-500" />} iconBg="bg-red-50" />
+          <StatCard label="Menunggu" value={counts.menunggu} desc="Menunggu verifikasi" icon={<BsClock className="w-6 h-6 text-yellow-600" />} iconBg="bg-yellow-50" />
+          <StatCard label="Diproses" value={counts.diproses} desc="Sedang dikerjakan" icon={<BsClock className="w-6 h-6 text-blue-600" />} iconBg="bg-blue-50" />
+          <StatCard label="Selesai" value={counts.selesai} desc="Surat telah diunggah" icon={<BsCheckCircle className="w-6 h-6 text-green-600" />} iconBg="bg-green-50" />
         </div>
 
         <div className="bg-white border border-gray-200 rounded-2xl shadow-sm">
