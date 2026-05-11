@@ -3,6 +3,23 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import api from "../services/api";
+import toast from "react-hot-toast";
+
+const Field = ({ label, name, type = "text", placeholder, value, onChange }) => (
+  <div>
+    <label className="block text-sm font-medium text-gray-700 mb-1">
+      {label}
+    </label>
+    <input
+      type={type}
+      required
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+    />
+  </div>
+);
 
 export default function Register() {
   const [form, setForm] = useState({
@@ -34,29 +51,15 @@ export default function Register() {
         password: form.password,
         role: "MAHASISWA",
       });
-      navigate("/login");
+      navigate("/login", { state: { message: "Registrasi berhasil! Silakan login." } });
     } catch (err) {
-      setError(err.response?.data?.message || "Registrasi gagal");
+      const msg = err.response?.data?.message || "Registrasi gagal";
+      setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
   };
-
-  const Field = ({ label, name, type = "text", placeholder }) => (
-    <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">
-        {label}
-      </label>
-      <input
-        type={type}
-        required
-        value={form[name]}
-        onChange={(e) => setForm({ ...form, [name]: e.target.value })}
-        placeholder={placeholder}
-        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-      />
-    </div>
-  );
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
@@ -77,25 +80,39 @@ export default function Register() {
             label="Nama Lengkap"
             name="nama"
             placeholder="Nama sesuai KTM"
+            value={form.nama}
+            onChange={(e) => setForm({ ...form, nama: e.target.value })}
           />
-          <Field label="NIM" name="nim" placeholder="Nomor Induk Mahasiswa" />
+          <Field
+            label="NIM"
+            name="nim"
+            placeholder="Nomor Induk Mahasiswa"
+            value={form.nim}
+            onChange={(e) => setForm({ ...form, nim: e.target.value })}
+          />
           <Field
             label="Email"
             name="email"
             type="email"
             placeholder="email@contoh.com"
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
           />
           <Field
             label="Password"
             name="password"
             type="password"
             placeholder="Minimal 6 karakter"
+            value={form.password}
+            onChange={(e) => setForm({ ...form, password: e.target.value })}
           />
           <Field
             label="Konfirmasi Password"
             name="confirmPassword"
             type="password"
             placeholder="Ulangi password"
+            value={form.confirmPassword}
+            onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
           />
           <button
             type="submit"

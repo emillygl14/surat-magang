@@ -18,6 +18,8 @@ model User {
   noHp         String?
   programStudi String?
   fotoProfil   String?
+  resetToken   String?
+  resetTokenExpiry DateTime?
   createdAt    DateTime    @default(now())
   pengajuan    Pengajuan[]
 }

@@ -4,6 +4,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { FiUser, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
 import { useAuth } from "../context/AuthContext";
 import api from "../services/api";
+import toast from "react-hot-toast";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import bgImage from "../assets/bg-landingpage.jpg";
 
 function Logo() {
@@ -28,6 +31,15 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.message) {
+      toast.success(location.state.message);
+      // Bersihkan state agar tidak muncul lagi saat refresh
+      window.history.replaceState({}, document.title);
+    }
+  }, [location]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,9 +48,12 @@ export default function Login() {
     try {
       const res = await api.post("/auth/login", { nim, password });
       login(res.data.user, res.data.token);
+      toast.success("Login berhasil!");
       navigate(res.data.user.role === "ADMIN" ? "/admin" : "/dashboard");
     } catch (err) {
-      setError(err.response?.data?.message || "NIM atau password salah");
+      const msg = err.response?.data?.message || "NIM atau password salah";
+      setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -169,9 +184,12 @@ export default function Login() {
                 />
                 Ingat saya
               </label>
-              <a href="#" className="text-sm text-blue-600 hover:underline">
+              <Link
+                to="/forgot-password"
+                className="text-sm text-blue-600 hover:underline"
+              >
                 Lupa password?
-              </a>
+              </Link>
             </div>
 
             {/* Tombol login */}

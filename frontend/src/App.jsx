@@ -4,6 +4,9 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 import LandingPage from "./pages/LandingPage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
+import { Toaster } from "react-hot-toast";
 
 // Layouts
 import MahasiswaLayout from "./components/layouts/MahasiswaLayout";
@@ -75,6 +78,22 @@ function AppRoutes() {
           </PublicRoute>
         }
       />
+      <Route
+        path="/forgot-password"
+        element={
+          <PublicRoute>
+            <ForgotPassword />
+          </PublicRoute>
+        }
+      />
+      <Route
+        path="/reset-password"
+        element={
+          <PublicRoute>
+            <ResetPassword />
+          </PublicRoute>
+        }
+      />
 
       {/* Dashboard Mahasiswa */}
       <Route
@@ -118,6 +137,7 @@ function AppRoutes() {
 export default function App() {
   return (
     <AuthProvider>
+      <Toaster position="top-right" />
       <BrowserRouter>
         <AppRoutes />
       </BrowserRouter>
