@@ -267,19 +267,10 @@ export default function DataMahasiswa() {
                   className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="">Pilih Program Studi</option>
-                  <option value="D3 Teknik Informatika">
-                    D3 Teknik Informatika
-                  </option>
-                  <option value="D4 Rekayasa Perangkat Lunak">
-                    D4 Rekayasa Perangkat Lunak
-                  </option>
-                  <option value="D3 Teknik Mesin">D3 Teknik Mesin</option>
-                  <option value="D4 Perancangan Manufaktur">
-                    D4 Perancangan Manufaktur
-                  </option>
-                  <option value="D3 Teknik Pendingin dan Tata Udara">
-                    D3 Teknik Pendingin dan Tata Udara
-                  </option>
+                  <option value="D3 Teknik Komputer">D3 Teknik Komputer</option>
+                  <option value="D4 Teknik Informatika">D4 Teknik Informatika</option>
+                  <option value="D3 Teknik Listrik">D3 Teknik Listrik</option>
+                  <option value="D4 Teknik Listrik">D4 Teknik Listrik</option>
                 </select>
               </div>
               <div>

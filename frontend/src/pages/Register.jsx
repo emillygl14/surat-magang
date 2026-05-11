@@ -28,6 +28,7 @@ export default function Register() {
     email: "",
     password: "",
     confirmPassword: "",
+    programStudi: "",
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -49,6 +50,7 @@ export default function Register() {
         nim: form.nim,
         email: form.email,
         password: form.password,
+        programStudi: form.programStudi,
         role: "MAHASISWA",
       });
       navigate("/login", { state: { message: "Registrasi berhasil! Silakan login." } });
@@ -90,6 +92,23 @@ export default function Register() {
             value={form.nim}
             onChange={(e) => setForm({ ...form, nim: e.target.value })}
           />
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Program Studi
+            </label>
+            <select
+              required
+              value={form.programStudi}
+              onChange={(e) => setForm({ ...form, programStudi: e.target.value })}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Pilih Program Studi</option>
+              <option value="D3 Teknik Komputer">D3 Teknik Komputer</option>
+              <option value="D4 Teknik Informatika">D4 Teknik Informatika</option>
+              <option value="D3 Teknik Listrik">D3 Teknik Listrik</option>
+              <option value="D4 Teknik Listrik">D4 Teknik Listrik</option>
+            </select>
+          </div>
           <Field
             label="Email"
             name="email"

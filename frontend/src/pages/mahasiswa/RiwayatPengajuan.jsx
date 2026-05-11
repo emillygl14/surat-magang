@@ -5,12 +5,14 @@ import api, { FILE_URL } from "../../services/api";
 
 const STATUS_BADGE = {
   PENDING: "bg-yellow-100 text-yellow-700 border border-yellow-200",
-  DISETUJUI: "bg-green-100 text-green-700 border border-green-200",
+  PROSES: "bg-blue-100 text-blue-700 border border-blue-200",
+  SELESAI: "bg-green-100 text-green-700 border border-green-200",
   DITOLAK: "bg-red-100 text-red-600 border border-red-200",
 };
 const STATUS_LABEL = {
-  PENDING: "Diproses",
-  DISETUJUI: "Disetujui",
+  PENDING: "Menunggu Verifikasi",
+  PROSES: "Sedang Diproses",
+  SELESAI: "Selesai",
   DITOLAK: "Ditolak",
 };
 
@@ -121,15 +123,14 @@ export default function RiwayatPengajuan() {
               <Row label="Jenis Surat" value={viewItem.jenisSurat} />
               <Row label="Perusahaan" value={viewItem.namaPerusahaan} />
               <Row label="Alamat" value={viewItem.alamatPerusahaan} />
-              <Row label="Tanggal Mulai" value={formatDate(viewItem.tanggalMulai)} />
-              <Row label="Tanggal Selesai" value={formatDate(viewItem.tanggalSelesai)} />
+              <Row label="Tanggal Pengajuan" value={formatDate(viewItem.createdAt)} />
               <Row label="Keperluan" value={viewItem.keperluan} />
               
               <div className="flex justify-between pt-1">
                 <span className="text-gray-500 shrink-0">File Pendukung</span>
                 <span className="text-right">
                   {viewItem.filePendukung ? (
-                    <a href={`${FILE_URL}${viewItem.filePendukung}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Lihat File</a>
+                    <a href={`${FILE_URL}${viewItem.filePendukung}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-medium">Lihat File</a>
                   ) : "-"}
                 </span>
               </div>
@@ -140,10 +141,38 @@ export default function RiwayatPengajuan() {
                   {STATUS_LABEL[viewItem.status]}
                 </span>
               </div>
+
+              {viewItem.status === "SELESAI" && viewItem.tglSelesaiSurat && (
+                <Row label="Tanggal Selesai" value={formatDate(viewItem.tglSelesaiSurat)} />
+              )}
+
+              {/* Display Rejection Reason */}
+              {viewItem.status === "DITOLAK" && viewItem.alasanPenolakan && (
+                <div className="bg-red-50 border border-red-100 rounded-xl px-4 py-3 mt-2">
+                  <p className="text-xs font-bold text-red-700 mb-1">Alasan Penolakan:</p>
+                  <p className="text-sm text-red-600">{viewItem.alasanPenolakan}</p>
+                </div>
+              )}
+
+              {/* Display Admin Note */}
               {viewItem.catatan && (
-                <div className="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2.5 mt-2">
-                  <p className="text-xs font-medium text-gray-600 mb-1">Catatan Admin:</p>
-                  <p className="text-xs text-gray-700">{viewItem.catatan}</p>
+                <div className="bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 mt-2">
+                  <p className="text-xs font-bold text-gray-500 mb-1">Catatan Admin:</p>
+                  <p className="text-sm text-gray-700">{viewItem.catatan}</p>
+                </div>
+              )}
+
+              {/* Download Finished Letter */}
+              {viewItem.status === "SELESAI" && viewItem.fileSelesai && (
+                <div className="pt-4">
+                  <a 
+                    href={`${FILE_URL}${viewItem.fileSelesai}`} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md"
+                  >
+                    Download Surat Selesai
+                  </a>
                 </div>
               )}
             </div>

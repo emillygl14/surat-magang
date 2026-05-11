@@ -37,6 +37,9 @@ model Pengajuan {
   filePendukung    String?
   status           Status   @default(PENDING)
   catatan          String?
+  alasanPenolakan  String?
+  fileSelesai      String?
+  tglSelesaiSurat  DateTime?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 }
@@ -63,5 +66,7 @@ enum Role {
 enum Status {
   PENDING
   DISETUJUI
+  PROSES
   DITOLAK
+  SELESAI
 }

@@ -5,12 +5,14 @@ import api, { FILE_URL } from "../../services/api";
 
 const STATUS_BADGE = {
   PENDING: "bg-yellow-100 text-yellow-700 border border-yellow-200",
-  DISETUJUI: "bg-green-100 text-green-700 border border-green-200",
+  PROSES: "bg-blue-100 text-blue-700 border border-blue-200",
+  SELESAI: "bg-green-100 text-green-700 border border-green-200",
   DITOLAK: "bg-red-100 text-red-600 border border-red-200",
 };
 const STATUS_LABEL = {
-  PENDING: "Diproses",
-  DISETUJUI: "Disetujui",
+  PENDING: "Menunggu Verifikasi",
+  PROSES: "Sedang Diproses",
+  SELESAI: "Selesai",
   DITOLAK: "Ditolak",
 };
 
@@ -21,13 +23,18 @@ export default function VerifikasiSurat() {
   const [pengajuan, setPengajuan] = useState([]);
   const [modal, setModal] = useState(null);
   const [catatan, setCatatan] = useState("");
+  const [alasanPenolakan, setAlasanPenolakan] = useState("");
+  const [fileSelesai, setFileSelesai] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showRejectForm, setShowRejectForm] = useState(false);
+  const [showFinishForm, setShowFinishForm] = useState(false);
 
   const fetchData = async () => {
     try {
       const res = await api.get("/pengajuan");
-      // Only show PENDING for verification page
-      setPengajuan(res.data.filter(p => p.status === "PENDING"));
+      // Show all except final statuses if you want, or just show all. 
+      // User wants to manage the workflow, so showing PENDING and PROSES is key.
+      setPengajuan(res.data.filter(p => p.status === "PENDING" || p.status === "PROSES"));
     } catch (err) {
       console.error(err);
     }
@@ -39,10 +46,29 @@ export default function VerifikasiSurat() {
 
   const handleUpdateStatus = async (status) => {
     setLoading(true);
+    const formData = new FormData();
+    formData.append("status", status);
+    formData.append("catatan", catatan);
+    
+    if (status === "DITOLAK") {
+      if (!alasanPenolakan) {
+        alert("Alasan penolakan wajib diisi");
+        setLoading(false);
+        return;
+      }
+      formData.append("alasanPenolakan", alasanPenolakan);
+    }
+    
+    if (status === "SELESAI" && fileSelesai) {
+      formData.append("fileSelesai", fileSelesai);
+    }
+
     try {
-      await api.patch(`/pengajuan/${modal.id}/status`, { status, catatan });
+      await api.patch(`/pengajuan/${modal.id}/status`, formData, {
+        headers: { "Content-Type": "multipart/form-data" }
+      });
       setModal(null);
-      setCatatan("");
+      resetForms();
       fetchData();
     } catch (err) {
       alert(err.response?.data?.message || "Gagal memperbarui status");
@@ -51,10 +77,18 @@ export default function VerifikasiSurat() {
     }
   };
 
+  const resetForms = () => {
+    setCatatan("");
+    setAlasanPenolakan("");
+    setFileSelesai(null);
+    setShowRejectForm(false);
+    setShowFinishForm(false);
+  };
+
   return (
     <>
       <header className="bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between shrink-0">
-        <h1 className="text-xl font-bold text-gray-900">Verifikasi Surat</h1>
+        <h1 className="text-xl font-bold text-gray-900">Pengelolaan Pengajuan</h1>
         <div className="flex items-center gap-3">
           <div className="text-right">
             <p className="text-sm font-semibold text-gray-900">{user?.nama}</p>
@@ -67,21 +101,21 @@ export default function VerifikasiSurat() {
       <main className="flex-1 p-8">
         <div className="bg-white border border-gray-200 rounded-2xl shadow-sm">
           <div className="px-6 py-4 border-b border-gray-100">
-            <h3 className="font-bold text-gray-900">Menunggu Verifikasi</h3>
-            <p className="text-xs text-gray-500 mt-1">Daftar pengajuan surat magang yang membutuhkan persetujuan.</p>
+            <h3 className="font-bold text-gray-900">Pengajuan Aktif</h3>
+            <p className="text-xs text-gray-500 mt-1">Daftar pengajuan yang sedang menunggu verifikasi atau dalam proses.</p>
           </div>
 
           <div className="overflow-x-auto">
             {pengajuan.length === 0 ? (
-              <div className="py-16 text-center text-gray-400 text-sm">Tidak ada pengajuan yang menunggu verifikasi.</div>
+              <div className="py-16 text-center text-gray-400 text-sm">Tidak ada pengajuan aktif saat ini.</div>
             ) : (
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-gray-100 bg-gray-50/50">
                     <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500">No</th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500">Nama Mahasiswa</th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500">Mahasiswa</th>
                     <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500">Jenis Surat</th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500">Tanggal</th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500">Status</th>
                     <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500">Aksi</th>
                   </tr>
                 </thead>
@@ -89,12 +123,19 @@ export default function VerifikasiSurat() {
                   {pengajuan.map((p, i) => (
                     <tr key={p.id} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
                       <td className="px-6 py-4 text-gray-500">{i + 1}</td>
-                      <td className="px-6 py-4 font-medium text-gray-900">{p.user?.nama}</td>
-                      <td className="px-6 py-4 text-gray-600">{p.jenisSurat}</td>
-                      <td className="px-6 py-4 text-gray-600">{formatDate(p.createdAt)}</td>
                       <td className="px-6 py-4">
-                        <button onClick={() => { setModal(p); setCatatan(""); }} className="bg-[#0d1b3e] hover:bg-[#1a2f5e] text-white px-4 py-1.5 rounded-lg font-medium text-xs transition-colors">
-                          Verifikasi
+                        <div className="font-medium text-gray-900">{p.user?.nama}</div>
+                        <div className="text-xs text-gray-400">NIM {p.user?.nim}</div>
+                      </td>
+                      <td className="px-6 py-4 text-gray-600">{p.jenisSurat}</td>
+                      <td className="px-6 py-4">
+                        <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${STATUS_BADGE[p.status]}`}>
+                          {STATUS_LABEL[p.status]}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <button onClick={() => { setModal(p); resetForms(); }} className="bg-[#0d1b3e] hover:bg-[#1a2f5e] text-white px-4 py-1.5 rounded-lg font-medium text-xs transition-colors">
+                          Kelola
                         </button>
                       </td>
                     </tr>
@@ -110,16 +151,15 @@ export default function VerifikasiSurat() {
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-4" onClick={(e) => { if (e.target === e.currentTarget) setModal(null); }}>
           <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-1">
-              <h3 className="font-bold text-gray-900">Proses Pengajuan</h3>
+              <h3 className="font-bold text-gray-900">Kelola Pengajuan</h3>
               <button onClick={() => setModal(null)} className="text-gray-400 hover:text-gray-600"><FiX className="w-5 h-5" /></button>
             </div>
             <p className="text-sm text-gray-500 mb-1">{modal.jenisSurat}</p>
-            <p className="text-xs text-gray-400 mb-5">{modal.user?.nama} · NIM {modal.user?.nim || "-"}</p>
+            <p className="text-xs text-gray-400 mb-5">{modal.user?.nama} · {modal.user?.nim}</p>
             
             <div className="space-y-3 text-sm mb-5 bg-gray-50 p-4 rounded-xl border border-gray-100">
               <Row label="Perusahaan" value={modal.namaPerusahaan} />
               <Row label="Alamat" value={modal.alamatPerusahaan} />
-              <Row label="Tanggal" value={`${formatDate(modal.tanggalMulai)} – ${formatDate(modal.tanggalSelesai)}`} />
               <Row label="Keperluan" value={modal.keperluan} />
               <div className="flex justify-between pt-1">
                 <span className="text-gray-500 shrink-0">File Pendukung</span>
@@ -129,37 +169,78 @@ export default function VerifikasiSurat() {
                   ) : "-"}
                 </span>
               </div>
+              <div className="flex justify-between pt-1">
+                <span className="text-gray-500">Status Saat Ini</span>
+                <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${STATUS_BADGE[modal.status]}`}>
+                  {STATUS_LABEL[modal.status]}
+                </span>
+              </div>
             </div>
 
-            <div className="mb-5">
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                Catatan Admin <span className="text-gray-400 font-normal">(opsional)</span>
-              </label>
-              <textarea
-                rows={3}
-                value={catatan}
-                onChange={(e) => setCatatan(e.target.value)}
-                placeholder="Tulis alasan persetujuan atau penolakan jika diperlukan..."
-                className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-              />
-            </div>
-            
-            <div className="flex gap-3">
-              <button
-                onClick={() => handleUpdateStatus("DISETUJUI")}
-                disabled={loading}
-                className="flex-1 bg-green-600 hover:bg-green-700 disabled:opacity-50 text-white text-sm font-medium py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2"
-              >
-                <FiCheck className="w-4 h-4" /> Setujui
-              </button>
-              <button
-                onClick={() => handleUpdateStatus("DITOLAK")}
-                disabled={loading}
-                className="flex-1 bg-red-500 hover:bg-red-600 disabled:opacity-50 text-white text-sm font-medium py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2"
-              >
-                <FiX className="w-4 h-4" /> Tolak
-              </button>
-            </div>
+            {/* Reject Form */}
+            {showRejectForm ? (
+              <div className="space-y-4 mb-5 animate-in fade-in slide-in-from-top-2 duration-200">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Alasan Penolakan <span className="text-red-500">*</span></label>
+                  <textarea
+                    rows={3}
+                    value={alasanPenolakan}
+                    onChange={(e) => setAlasanPenolakan(e.target.value)}
+                    placeholder="Sebutkan alasan mengapa pengajuan ini ditolak..."
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-500 resize-none"
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <button onClick={() => handleUpdateStatus("DITOLAK")} disabled={loading} className="flex-1 bg-red-600 text-white text-sm font-medium py-2 rounded-lg">Konfirmasi Tolak</button>
+                  <button onClick={() => setShowRejectForm(false)} className="flex-1 bg-gray-100 text-gray-700 text-sm font-medium py-2 rounded-lg">Batal</button>
+                </div>
+              </div>
+            ) : showFinishForm ? (
+              <div className="space-y-4 mb-5 animate-in fade-in slide-in-from-top-2 duration-200">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Unggah Surat Selesai (.pdf/.doc)</label>
+                  <input
+                    type="file"
+                    onChange={(e) => setFileSelesai(e.target.files[0])}
+                    accept=".pdf,.doc,.docx"
+                    className="w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <button onClick={() => handleUpdateStatus("SELESAI")} disabled={loading} className="flex-1 bg-green-600 text-white text-sm font-medium py-2 rounded-lg">Selesaikan & Kirim</button>
+                  <button onClick={() => setShowFinishForm(false)} className="flex-1 bg-gray-100 text-gray-700 text-sm font-medium py-2 rounded-lg">Batal</button>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Catatan Admin <span className="text-gray-400 font-normal">(opsional)</span></label>
+                  <textarea
+                    rows={2}
+                    value={catatan}
+                    onChange={(e) => setCatatan(e.target.value)}
+                    placeholder="Tambahkan catatan tambahan..."
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                  />
+                </div>
+                
+                <div className="grid grid-cols-2 gap-3">
+                  {modal.status === "PENDING" && (
+                    <button onClick={() => handleUpdateStatus("PROSES")} disabled={loading} className="col-span-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2.5 rounded-lg flex items-center justify-center gap-2">
+                      <FiCheck className="w-4 h-4" /> Verifikasi & Proses
+                    </button>
+                  )}
+                  {modal.status === "PROSES" && (
+                    <button onClick={() => setShowFinishForm(true)} disabled={loading} className="col-span-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium py-2.5 rounded-lg flex items-center justify-center gap-2">
+                      <FiCheck className="w-4 h-4" /> Selesaikan Pengajuan
+                    </button>
+                  )}
+                  <button onClick={() => setShowRejectForm(true)} disabled={loading} className="col-span-2 border border-red-200 text-red-600 hover:bg-red-50 text-sm font-medium py-2 rounded-lg flex items-center justify-center gap-2">
+                    <FiX className="w-4 h-4" /> Tolak Pengajuan
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}

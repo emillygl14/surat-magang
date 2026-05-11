@@ -73,15 +73,29 @@ const getAllPengajuan = async (req, res) => {
 const updateStatus = async (req, res) => {
   try {
     const { id } = req.params;
-    const { status, catatan } = req.body;
+    const { status, catatan, alasanPenolakan } = req.body;
 
-    if (!["PENDING", "DISETUJUI", "DITOLAK"].includes(status)) {
+    const validStatuses = ["PENDING", "PROSES", "DITOLAK", "SELESAI"];
+    if (!validStatuses.includes(status)) {
       return res.status(400).json({ message: "Status tidak valid" });
+    }
+
+    const updateData = { 
+      status, 
+      catatan: catatan || null,
+      alasanPenolakan: alasanPenolakan || null 
+    };
+
+    if (status === "SELESAI") {
+      updateData.tglSelesaiSurat = new Date();
+      if (req.file) {
+        updateData.fileSelesai = `/uploads/${req.file.filename}`;
+      }
     }
 
     const pengajuan = await prisma.pengajuan.update({
       where: { id },
-      data: { status, catatan: catatan || null },
+      data: updateData,
     });
 
     res.json({ message: "Status berhasil diperbarui", pengajuan });

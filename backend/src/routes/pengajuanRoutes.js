@@ -18,6 +18,6 @@ router.delete("/:id", verifyToken, deletePengajuan);
 
 // Admin
 router.get("/", verifyToken, isAdmin, getAllPengajuan);
-router.patch("/:id/status", verifyToken, isAdmin, updateStatus);
+router.patch("/:id/status", verifyToken, isAdmin, upload.single("fileSelesai"), updateStatus);
 
 module.exports = router;
