@@ -145,51 +145,31 @@ export default function LandingPage() {
                 onClick={() => setIsMenuOpen(false)}
                 className="bg-blue-600 text-white text-center text-xl font-bold py-4 rounded-xl shadow-lg mt-4"
               >
-                Login ke Akun
-              </Link>
-            </div>
-          )}
+      >
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0d1b3e]/90 via-[#0d1b3e]/70 to-transparent" />
 
-          {/* Hero Content */}
-          <div className="flex-1 flex flex-col justify-center px-8 md:px-16 max-w-3xl">
-            <h1 className="text-white text-4xl md:text-5xl font-bold leading-tight mb-6">
-              Sistem Pengajuan dan Pengelolaan Surat Magang Mahasiswa
+        <div className="relative z-10 w-full max-w-6xl mx-auto pt-20">
+          <div className="max-w-3xl">
+            <h1 className="text-4xl md:text-6xl font-black text-white leading-[1.1] mb-6 tracking-tight">
+              Sistem Pengajuan dan
+              <br />
+              <span className="text-blue-400">Pengelolaan Surat Magang</span>
+              <br />
+              Mahasiswa
             </h1>
-            <p className="text-gray-200 text-base md:text-lg leading-relaxed max-w-xl mb-10">
+            <p className="text-gray-200 text-lg md:text-xl leading-relaxed max-w-2xl mb-10 opacity-90">
               Sistem terintegrasi untuk memudahkan mahasiswa dalam mengajukan
               surat magang dan memudahkan admin dalam mengelola surat secara
               efisien dan transparan.
             </p>
-
-          </div>
-
-          {/* Floating Info card */}
-          <div className="px-8 md:px-16 pb-12">
-            <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 max-w-lg flex items-start gap-5 shadow-2xl border border-white/20">
-              <div className="w-16 h-16 rounded-full bg-[#0d1b3e] flex items-center justify-center shrink-0 shadow-lg">
-                <FiInfo className="w-8 h-8 text-white" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-xs font-bold text-blue-600 uppercase tracking-widest mb-1">
-                  Informasi Jurusan
-                </p>
-                <p className="font-bold text-[#0d1b3e] text-lg mb-1">
-                  Jurusan Teknik Elektro
-                </p>
-                <p className="text-xs text-gray-500 mb-3 font-medium">
-                  Politeknik Negeri Manado
-                </p>
-                <p className="text-sm text-gray-600 leading-relaxed mb-4">
-                  Jurusan Teknik Elektro berkomitmen mencetak lulusan kompeten
-                  dan siap bersaing di dunia industri global.
-                </p>
-                <a
-                  href="#informasi-jurusan"
-                  className="inline-flex items-center gap-2 bg-[#1e3a8a] hover:bg-[#1e40af] text-white text-xs font-bold px-5 py-2.5 rounded-lg transition-all shadow-md"
-                >
-                  Selengkapnya <FiArrowRight className="w-3 h-3" />
-                </a>
-              </div>
+            
+            <div className="flex flex-wrap gap-4">
+              <Link
+                to="/login"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all shadow-xl shadow-blue-600/20 flex items-center gap-3 group"
+              >
+                Mulai Sekarang <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
+              </Link>
             </div>
           </div>
         </div>
