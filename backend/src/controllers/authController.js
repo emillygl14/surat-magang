@@ -123,14 +123,16 @@ const getProfile = async (req, res) => {
 const updateProfile = async (req, res) => {
   try {
     const { nama, email, nim, noHp, programStudi, password } = req.body;
-    
-    let updateData = {
-      nama,
-      email,
-      nim: nim || null,
-      noHp: noHp || null,
-      programStudi: programStudi || null,
-    };
+    const userId = req.user.id;
+
+    // Build update data dynamically
+    const updateData = {};
+    if (nama) updateData.nama = nama;
+    if (email) updateData.email = email;
+    if (nim !== undefined) updateData.nim = nim || null;
+    if (noHp !== undefined) updateData.noHp = noHp || null;
+    if (programStudi !== undefined)
+      updateData.programStudi = programStudi || null;
 
     if (password) {
       updateData.password = await bcrypt.hash(password, 10);
@@ -140,8 +142,26 @@ const updateProfile = async (req, res) => {
       updateData.fotoProfil = `/uploads/${req.file.filename}`;
     }
 
+    // Check for unique constraints if email or nim is changed
+    if (email || nim) {
+      const existing = await prisma.user.findFirst({
+        where: {
+          OR: [
+            email ? { email } : null,
+            nim ? { nim } : null,
+          ].filter(Boolean),
+          NOT: { id: userId },
+        },
+      });
+
+      if (existing) {
+        const field = existing.email === email ? "Email" : "NIM";
+        return res.status(400).json({ message: `${field} sudah digunakan oleh akun lain` });
+      }
+    }
+
     const user = await prisma.user.update({
-      where: { id: req.user.id },
+      where: { id: userId },
       data: updateData,
       select: {
         id: true,
@@ -152,11 +172,12 @@ const updateProfile = async (req, res) => {
         noHp: true,
         programStudi: true,
         fotoProfil: true,
-      }
+      },
     });
 
     res.json({ message: "Profil berhasil diperbarui", user });
   } catch (error) {
+    console.error("Update Profile Error:", error);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };

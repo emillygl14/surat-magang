@@ -3,7 +3,7 @@ import { useAuth } from "../../context/AuthContext";
 import api from "../../services/api";
 
 export default function Profil() {
-  const { user, login } = useAuth(); // use login to update context user
+  const { user, updateUser } = useAuth();
   const [form, setForm] = useState({
     nama: "",
     email: "",
@@ -35,21 +35,24 @@ export default function Profil() {
     setLoading(true);
 
     const formData = new FormData();
-    Object.keys(form).forEach(key => {
+    Object.keys(form).forEach((key) => {
       if (form[key]) formData.append(key, form[key]);
     });
     if (file) formData.append("fotoProfil", file);
 
     try {
-      const res = await api.put("/auth/profile", formData, { headers: { "Content-Type": "multipart/form-data" } });
+      const res = await api.put("/auth/profile", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       setMsg({ type: "success", text: "Profil berhasil diperbarui!" });
-      
-      // Update auth context by calling the profile API again or just updating the user object in context
-      // But we don't have update function in context, so we might need to reload or add an update function.
-      // Wait, we can modify AuthContext later, for now we can just reload after a brief delay
-      setTimeout(() => window.location.reload(), 1000);
+      updateUser(res.data.user);
+      setForm((prev) => ({ ...prev, password: "" }));
+      setFile(null);
     } catch (err) {
-      setMsg({ type: "error", text: err.response?.data?.message || "Gagal memperbarui profil" });
+      setMsg({
+        type: "error",
+        text: err.response?.data?.message || "Gagal memperbarui profil",
+      });
     } finally {
       setLoading(false);
     }
