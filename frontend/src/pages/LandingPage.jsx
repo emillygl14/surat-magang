@@ -145,31 +145,36 @@ export default function LandingPage() {
                 onClick={() => setIsMenuOpen(false)}
                 className="bg-blue-600 text-white text-center text-xl font-bold py-4 rounded-xl shadow-lg mt-4"
               >
-      >
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0d1b3e]/90 via-[#0d1b3e]/70 to-transparent" />
-
-        <div className="relative z-10 w-full max-w-6xl mx-auto pt-20">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-6xl font-black text-white leading-[1.1] mb-6 tracking-tight">
-              Sistem Pengajuan dan
-              <br />
-              <span className="text-blue-400">Pengelolaan Surat Magang</span>
-              <br />
-              Mahasiswa
-            </h1>
-            <p className="text-gray-200 text-lg md:text-xl leading-relaxed max-w-2xl mb-10 opacity-90">
-              Sistem terintegrasi untuk memudahkan mahasiswa dalam mengajukan
-              surat magang dan memudahkan admin dalam mengelola surat secara
-              efisien dan transparan.
-            </p>
-            
-            <div className="flex flex-wrap gap-4">
-              <Link
-                to="/login"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all shadow-xl shadow-blue-600/20 flex items-center gap-3 group"
-              >
-                Mulai Sekarang <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
+                Login ke Akun
               </Link>
+            </div>
+          )}
+
+          {/* Hero Content */}
+          <div className="flex-1 flex flex-col justify-end px-8 md:px-16 pb-20 md:pb-32">
+            <div className="max-w-4xl">
+              <h1 className="text-4xl md:text-7xl font-black text-white leading-[1.05] mb-6 tracking-tighter drop-shadow-lg">
+                Sistem Pengajuan dan
+                <br />
+                Pengelolaan Surat Magang
+                <br />
+                Mahasiswa
+              </h1>
+              <p className="text-gray-200 text-lg md:text-xl leading-relaxed max-w-2xl mb-10 opacity-90 drop-shadow-md">
+                Sistem terintegrasi untuk memudahkan mahasiswa dalam mengajukan
+                surat magang dan memudahkan admin dalam mengelola surat secara
+                efisien dan transparan.
+              </p>
+
+              <div className="flex flex-wrap gap-4">
+                <Link
+                  to="/login"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all shadow-2xl shadow-blue-600/30 flex items-center gap-3 group"
+                >
+                  Mulai Sekarang
+                  <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </div>
             </div>
           </div>
         </div>
