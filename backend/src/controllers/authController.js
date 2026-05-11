@@ -91,6 +91,7 @@ const login = async (req, res) => {
         email: user.email,
         role: user.role,
         nim: user.nim,
+        fotoProfil: user.fotoProfil,
       },
     });
   } catch (error) {
