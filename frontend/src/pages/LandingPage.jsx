@@ -17,7 +17,7 @@ function Logo({ size = "md" }) {
         <span
           className={`text-white font-black tracking-tighter ${size === "sm" ? "text-lg" : "text-2xl"}`}
         >
-          ELE
+          ELEK
         </span>
         <FiZap className={`${size === "sm" ? "w-4 h-4" : "w-6 h-6"} text-yellow-400 fill-yellow-400 filter drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]`} />
         <span

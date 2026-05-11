@@ -17,7 +17,7 @@ function Logo() {
       </span>
       <div className="flex items-center gap-1">
         <span className="text-white font-black text-2xl tracking-tighter">
-          ELE
+          ELEK
         </span>
         <FiZap className="w-6 h-6 text-yellow-400 fill-yellow-400 filter drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]" />
         <span className="text-white font-black text-2xl tracking-tighter">
@@ -115,7 +115,7 @@ export default function Login() {
             </span>
             <div className="flex items-center gap-1">
               <span className="text-[#0d1b3e] font-black text-2xl tracking-tighter">
-                ELE
+                ELEK
               </span>
               <FiZap className="w-6 h-6 text-yellow-500 fill-yellow-500" />
               <span className="text-[#0d1b3e] font-black text-2xl tracking-tighter">

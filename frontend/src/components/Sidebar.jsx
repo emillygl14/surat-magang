@@ -64,7 +64,7 @@ export default function Sidebar({ role, isOpen, onClose }) {
             </span>
             <div className="flex items-center gap-1">
               <span className="text-white font-black text-xl tracking-tighter">
-                ELE
+                ELEK
               </span>
               <FiZap className="w-5 h-5 text-yellow-400 fill-yellow-400" />
               <span className="text-white font-black text-xl tracking-tighter">
