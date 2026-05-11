@@ -46,14 +46,14 @@ export default function Dashboard() {
 
   return (
     <>
-      <header className="bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between shrink-0">
+      <header className="bg-white border-b border-gray-200 px-8 h-16 flex items-center justify-between shrink-0">
         <h1 className="text-xl font-bold text-gray-900">Dashboard Admin</h1>
         <div className="flex items-center gap-3">
-          <div className="text-right">
+          <div className="text-right leading-tight">
             <p className="text-sm font-semibold text-gray-900">{user?.nama}</p>
-            <p className="text-xs text-gray-500">Administrator</p>
+            <p className="text-[10px] uppercase tracking-wider font-bold text-gray-400">Administrator</p>
           </div>
-          <img src={`https://ui-avatars.com/api/?name=${user?.nama}&background=0D8ABC&color=fff`} alt="Profile" className="w-9 h-9 rounded-full" />
+          <img src={`https://ui-avatars.com/api/?name=${user?.nama}&background=0D8ABC&color=fff`} alt="Profile" className="w-9 h-9 rounded-full border border-gray-100" />
         </div>
       </header>
 
