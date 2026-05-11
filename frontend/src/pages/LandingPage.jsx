@@ -2,22 +2,30 @@ import React from "react";
 import { Link } from "react-router-dom";
 import bgImage from "../assets/bg-landingpage.jpg";
 import iluJurusan from "../assets/jurusan-elektro.png";
-import { FiInfo, FiBookOpen, FiArrowRight, FiMenu, FiX } from "react-icons/fi";
+import { FiInfo, FiBookOpen, FiArrowRight, FiMenu, FiX, FiZap } from "react-icons/fi";
 import { useState, useEffect } from "react";
 
 function Logo({ size = "md" }) {
   return (
     <div className="flex flex-col leading-none">
       <span
-        className={`text-gray-400 ${size === "sm" ? "text-[9px]" : "text-[10px]"} tracking-widest uppercase`}
+        className={`text-gray-400 ${size === "sm" ? "text-[9px]" : "text-[10px]"} tracking-widest uppercase font-bold`}
       >
         Polimdo
       </span>
-      <span
-        className={`text-white font-black tracking-tight ${size === "sm" ? "text-lg" : "text-2xl"}`}
-      >
-        ELE<span className="text-red-500">/</span>TRO
-      </span>
+      <div className="flex items-center gap-1">
+        <span
+          className={`text-white font-black tracking-tighter ${size === "sm" ? "text-lg" : "text-2xl"}`}
+        >
+          ELE
+        </span>
+        <FiZap className={`${size === "sm" ? "w-4 h-4" : "w-6 h-6"} text-yellow-400 fill-yellow-400 filter drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]`} />
+        <span
+          className={`text-white font-black tracking-tighter ${size === "sm" ? "text-lg" : "text-2xl"}`}
+        >
+          TRO
+        </span>
+      </div>
     </div>
   );
 }

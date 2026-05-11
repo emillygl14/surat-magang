@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FiUser, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
+import { FiUser, FiLock, FiEye, FiEyeOff, FiZap } from "react-icons/fi";
 import { useAuth } from "../context/AuthContext";
 import api from "../services/api";
 import toast from "react-hot-toast";
@@ -12,12 +12,18 @@ import bgImage from "../assets/bg-landingpage.jpg";
 function Logo() {
   return (
     <div className="flex flex-col leading-none">
-      <span className="text-gray-400 text-[10px] tracking-widest uppercase">
+      <span className="text-gray-400 text-[10px] tracking-widest uppercase font-bold">
         Polimdo
       </span>
-      <span className="text-white font-black text-2xl tracking-tight">
-        ELEK<span className="text-red-500">/</span>TRO
-      </span>
+      <div className="flex items-center gap-1">
+        <span className="text-white font-black text-2xl tracking-tighter">
+          ELE
+        </span>
+        <FiZap className="w-6 h-6 text-yellow-400 fill-yellow-400 filter drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]" />
+        <span className="text-white font-black text-2xl tracking-tighter">
+          TRO
+        </span>
+      </div>
     </div>
   );
 }
@@ -104,12 +110,18 @@ export default function Login() {
         <div className="w-full max-w-sm">
           {/* Mobile logo */}
           <div className="lg:hidden mb-8 flex flex-col leading-none">
-            <span className="text-gray-500 text-[10px] tracking-widest uppercase">
+            <span className="text-gray-500 text-[10px] tracking-widest uppercase font-bold">
               Polimdo
             </span>
-            <span className="text-[#0d1b3e] font-black text-2xl tracking-tight">
-              ELEK<span className="text-red-500">/</span>TRO
-            </span>
+            <div className="flex items-center gap-1">
+              <span className="text-[#0d1b3e] font-black text-2xl tracking-tighter">
+                ELE
+              </span>
+              <FiZap className="w-6 h-6 text-yellow-500 fill-yellow-500" />
+              <span className="text-[#0d1b3e] font-black text-2xl tracking-tighter">
+                TRO
+              </span>
+            </div>
           </div>
 
           <h1 className="text-3xl font-bold text-[#0d1b3e] mb-1">Login</h1>

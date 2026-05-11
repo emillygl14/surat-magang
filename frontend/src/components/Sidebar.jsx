@@ -13,6 +13,7 @@ import {
   FiSettings,
   FiLogOut,
   FiX,
+  FiZap,
 } from "react-icons/fi";
 import { useAuth } from "../context/AuthContext";
 
@@ -58,12 +59,18 @@ export default function Sidebar({ role, isOpen, onClose }) {
         {/* Logo & Close Button */}
         <div className="px-6 py-6 border-b border-white/10 flex items-center justify-between">
           <div>
-            <span className="text-gray-400 text-[9px] tracking-widest uppercase block mb-0.5">
+            <span className="text-gray-400 text-[9px] tracking-widest uppercase block mb-0.5 font-bold">
               Polimdo
             </span>
-            <span className="text-white font-black text-xl tracking-tight">
-              ELE<span className="text-red-500">/</span>TRO
-            </span>
+            <div className="flex items-center gap-1">
+              <span className="text-white font-black text-xl tracking-tighter">
+                ELE
+              </span>
+              <FiZap className="w-5 h-5 text-yellow-400 fill-yellow-400" />
+              <span className="text-white font-black text-xl tracking-tighter">
+                TRO
+              </span>
+            </div>
           </div>
           <button
             onClick={onClose}
