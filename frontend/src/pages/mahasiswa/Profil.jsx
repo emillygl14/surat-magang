@@ -60,17 +60,17 @@ export default function Profil() {
 
   return (
     <>
-      <header className="bg-white border-b border-gray-200 px-8 h-16 flex items-center justify-between shrink-0">
-        <h1 className="text-xl font-bold text-gray-900">Profil Saya</h1>
-        <div className="flex items-center gap-3">
-          <div className="text-right leading-tight">
+      <header className="bg-white border-b border-gray-200 px-4 sm:px-8 h-14 sm:h-16 flex items-center justify-between shrink-0">
+        <h1 className="text-base sm:text-xl font-bold text-gray-900">Profil Saya</h1>
+        <div className="flex items-center gap-2">
+          <div className="hidden sm:block text-right leading-tight">
             <p className="text-sm font-semibold text-gray-900">{user?.nama}</p>
             <p className="text-[10px] uppercase tracking-wider font-bold text-gray-400">{user?.nim}</p>
           </div>
           <img 
             src={user?.fotoProfil ? `${FILE_URL}${user.fotoProfil}` : `https://ui-avatars.com/api/?name=${user?.nama}&background=0D8ABC&color=fff`} 
             alt="Profile" 
-            className="w-9 h-9 rounded-full object-cover border border-gray-100"
+            className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover border border-gray-100"
             onError={(e) => {
               e.target.onerror = null;
               e.target.src = `https://ui-avatars.com/api/?name=${user?.nama}&background=0D8ABC&color=fff`;
@@ -79,7 +79,7 @@ export default function Profil() {
         </div>
       </header>
 
-      <main className="flex-1 p-8 max-w-3xl mx-auto w-full">
+      <main className="flex-1 p-4 sm:p-8 max-w-3xl mx-auto w-full">
         <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
           <h3 className="text-lg font-bold text-gray-900 mb-6">Edit Profil</h3>
           

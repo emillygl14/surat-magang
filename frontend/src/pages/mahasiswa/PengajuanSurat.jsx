@@ -83,18 +83,18 @@ export default function PengajuanSurat() {
 
   return (
     <>
-      <header className="bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between shrink-0">
-        <h1 className="text-xl font-bold text-gray-900">Buat Pengajuan Surat</h1>
-        <div className="flex items-center gap-3">
-          <div className="text-right">
+      <header className="bg-white border-b border-gray-200 px-4 sm:px-8 py-3 sm:py-4 flex items-center justify-between shrink-0">
+        <h1 className="text-base sm:text-xl font-bold text-gray-900">Buat Pengajuan Surat</h1>
+        <div className="flex items-center gap-2">
+          <div className="hidden sm:block text-right">
             <p className="text-sm font-semibold text-gray-900">{user?.nama}</p>
             <p className="text-xs text-gray-500">{user?.nim}</p>
           </div>
-          <img src={user?.fotoProfil ? `${FILE_URL}${user.fotoProfil}` : `https://ui-avatars.com/api/?name=${user?.nama}`} alt="Profile" className="w-9 h-9 rounded-full object-cover" />
+          <img src={user?.fotoProfil ? `${FILE_URL}${user.fotoProfil}` : `https://ui-avatars.com/api/?name=${user?.nama}`} alt="Profile" className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover" />
         </div>
       </header>
 
-      <main className="flex-1 p-8 max-w-4xl mx-auto w-full">
+      <main className="flex-1 p-4 sm:p-8 max-w-4xl mx-auto w-full">
         <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
           <h3 className="text-lg font-bold text-gray-900 mb-6">Form Pengajuan Surat Magang</h3>
           

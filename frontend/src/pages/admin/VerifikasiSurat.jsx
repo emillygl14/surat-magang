@@ -98,25 +98,26 @@ export default function VerifikasiSurat() {
 
   return (
     <>
-      <header className="bg-white border-b border-gray-200 px-8 h-16 flex items-center justify-between shrink-0">
-        <h1 className="text-xl font-bold text-gray-900">Verifikasi Surat</h1>
-        <div className="flex items-center gap-3">
-          <div className="text-right leading-tight">
+      <header className="bg-white border-b border-gray-200 px-4 sm:px-8 h-14 sm:h-16 flex items-center justify-between shrink-0">
+        <h1 className="text-base sm:text-xl font-bold text-gray-900">Verifikasi Surat</h1>
+        <div className="flex items-center gap-2">
+          <div className="hidden sm:block text-right leading-tight">
             <p className="text-sm font-semibold text-gray-900">{user?.nama}</p>
             <p className="text-[10px] uppercase tracking-wider font-bold text-gray-400">Administrator</p>
           </div>
-          <img src={`https://ui-avatars.com/api/?name=${user?.nama}&background=0D8ABC&color=fff`} alt="Profile" className="w-9 h-9 rounded-full border border-gray-100" />
+          <img src={`https://ui-avatars.com/api/?name=${user?.nama}&background=0D8ABC&color=fff`} alt="Profile" className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-gray-100" />
         </div>
       </header>
 
-      <main className="flex-1 p-8">
+      <main className="flex-1 p-4 sm:p-8">
         <div className="bg-white border border-gray-200 rounded-2xl shadow-sm">
-          <div className="px-6 py-4 border-b border-gray-100">
+          <div className="px-4 sm:px-6 py-4 border-b border-gray-100">
             <h3 className="font-bold text-gray-900">Pengajuan Aktif</h3>
             <p className="text-xs text-gray-500 mt-1">Daftar pengajuan yang sedang menunggu verifikasi atau dalam proses.</p>
           </div>
 
-          <div className="overflow-x-auto">
+          {/* Desktop Table */}
+          <div className="hidden sm:block overflow-x-auto">
             {pengajuan.length === 0 ? (
               <div className="py-16 text-center text-gray-400 text-sm">Tidak ada pengajuan aktif saat ini.</div>
             ) : (
@@ -169,6 +170,36 @@ export default function VerifikasiSurat() {
                   ))}
                 </tbody>
               </table>
+            )}
+          </div>
+
+          {/* Mobile Card List */}
+          <div className="sm:hidden">
+            {pengajuan.length === 0 ? (
+              <div className="py-12 text-center text-gray-400 text-sm">Tidak ada pengajuan aktif saat ini.</div>
+            ) : (
+              <div className="divide-y divide-gray-50">
+                {pengajuan.map((p) => (
+                  <div key={p.id} className="px-4 py-3.5">
+                    <div className="flex items-start justify-between gap-2 mb-1.5">
+                      <div>
+                        <p className="text-sm font-semibold text-gray-900">{p.user?.nama}</p>
+                        <p className="text-xs text-gray-400">NIM {p.user?.nim}</p>
+                      </div>
+                      <span className={`shrink-0 text-xs px-2 py-0.5 rounded-full font-medium ${STATUS_BADGE[p.status]}`}>
+                        {STATUS_LABEL[p.status]}
+                      </span>
+                    </div>
+                    <p className="text-xs text-gray-600 mb-2.5">{p.jenisSurat}</p>
+                    <button
+                      onClick={() => { setModal(p); resetForms(); }}
+                      className="flex items-center gap-1.5 text-xs font-medium text-blue-600 hover:text-blue-800 transition-colors"
+                    >
+                      <FiEye className="w-3.5 h-3.5" /> Kelola Pengajuan
+                    </button>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
         </div>

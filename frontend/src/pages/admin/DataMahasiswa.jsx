@@ -88,101 +88,69 @@ export default function DataMahasiswa() {
 
   return (
     <>
-      <header className="bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between shrink-0">
-        <h1 className="text-xl font-bold text-gray-900">
-          Kelola Data Mahasiswa
-        </h1>
-        <div className="flex items-center gap-3">
-          <div className="text-right">
+      <header className="bg-white border-b border-gray-200 px-4 sm:px-8 py-3 sm:py-4 flex items-center justify-between shrink-0">
+        <h1 className="text-base sm:text-xl font-bold text-gray-900">Kelola Data Mahasiswa</h1>
+        <div className="flex items-center gap-2">
+          <div className="hidden sm:block text-right">
             <p className="text-sm font-semibold text-gray-900">{user?.nama}</p>
             <p className="text-xs text-gray-500">Administrator</p>
           </div>
           <img
             src={`https://ui-avatars.com/api/?name=${user?.nama}&background=0D8ABC&color=fff`}
             alt="Profile"
-            className="w-9 h-9 rounded-full"
+            className="w-8 h-8 sm:w-9 sm:h-9 rounded-full"
           />
         </div>
       </header>
 
-      <main className="flex-1 p-8">
+      <main className="flex-1 p-4 sm:p-8">
         <div className="bg-white border border-gray-200 rounded-2xl shadow-sm">
-          <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+          <div className="px-4 sm:px-6 py-4 border-b border-gray-100 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
             <input
               type="text"
               placeholder="Cari nama atau NIM..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-64"
+              className="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-64"
             />
             <button
               onClick={() => openModal(false)}
-              className="flex items-center gap-2 bg-[#0d1b3e] hover:bg-[#1a2f5e] text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors"
+              className="flex items-center justify-center gap-2 bg-[#0d1b3e] hover:bg-[#1a2f5e] text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors"
             >
-              <FiPlus /> Tambah Mahasiswa
+              <FiPlus /> <span>Tambah Mahasiswa</span>
             </button>
           </div>
 
-          <div className="overflow-x-auto">
+          {/* Desktop Table */}
+          <div className="hidden sm:block overflow-x-auto">
             {filtered.length === 0 ? (
-              <div className="py-16 text-center text-gray-400 text-sm">
-                Data tidak ditemukan.
-              </div>
+              <div className="py-16 text-center text-gray-400 text-sm">Data tidak ditemukan.</div>
             ) : (
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-gray-100 bg-gray-50/50">
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500">
-                      No
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500">
-                      NIM
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500">
-                      Nama
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500">
-                      Email
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500">
-                      Program Studi
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500">
-                      Aksi
-                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500">No</th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500">NIM</th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500">Nama</th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500">Email</th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500">Program Studi</th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500">Aksi</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filtered.map((m, i) => (
-                    <tr
-                      key={m.id}
-                      className="border-b border-gray-50 hover:bg-gray-50 transition-colors"
-                    >
+                    <tr key={m.id} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
                       <td className="px-6 py-4 text-gray-500">{i + 1}</td>
-                      <td className="px-6 py-4 font-medium text-gray-900">
-                        {m.nim || "-"}
-                      </td>
-                      <td className="px-6 py-4 font-medium text-gray-900">
-                        {m.nama}
-                      </td>
+                      <td className="px-6 py-4 font-medium text-gray-900">{m.nim || "-"}</td>
+                      <td className="px-6 py-4 font-medium text-gray-900">{m.nama}</td>
                       <td className="px-6 py-4 text-gray-600">{m.email}</td>
-                      <td className="px-6 py-4 text-gray-600">
-                        {m.programStudi || "-"}
-                      </td>
+                      <td className="px-6 py-4 text-gray-600">{m.programStudi || "-"}</td>
                       <td className="px-6 py-4">
                         <div className="flex gap-2">
-                          <button
-                            onClick={() => openModal(true, m)}
-                            className="text-blue-500 hover:text-blue-700 transition-colors"
-                            title="Edit"
-                          >
+                          <button onClick={() => openModal(true, m)} className="text-blue-500 hover:text-blue-700 transition-colors" title="Edit">
                             <FiEdit2 />
                           </button>
-                          <button
-                            onClick={() => handleDelete(m.id)}
-                            className="text-red-500 hover:text-red-700 transition-colors"
-                            title="Hapus"
-                          >
+                          <button onClick={() => handleDelete(m.id)} className="text-red-500 hover:text-red-700 transition-colors" title="Hapus">
                             <FiTrash2 />
                           </button>
                         </div>
@@ -191,6 +159,33 @@ export default function DataMahasiswa() {
                   ))}
                 </tbody>
               </table>
+            )}
+          </div>
+
+          {/* Mobile Card List */}
+          <div className="sm:hidden">
+            {filtered.length === 0 ? (
+              <div className="py-12 text-center text-gray-400 text-sm">Data tidak ditemukan.</div>
+            ) : (
+              <div className="divide-y divide-gray-50">
+                {filtered.map((m) => (
+                  <div key={m.id} className="px-4 py-3.5 flex items-center justify-between gap-3">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-gray-900 truncate">{m.nama}</p>
+                      <p className="text-xs text-gray-500">{m.nim || "NIM belum diisi"}</p>
+                      <p className="text-xs text-gray-400 truncate">{m.programStudi || "-"}</p>
+                    </div>
+                    <div className="flex items-center gap-3 shrink-0">
+                      <button onClick={() => openModal(true, m)} className="text-blue-500 hover:text-blue-700 transition-colors p-1" title="Edit">
+                        <FiEdit2 className="w-4 h-4" />
+                      </button>
+                      <button onClick={() => handleDelete(m.id)} className="text-red-500 hover:text-red-700 transition-colors p-1" title="Hapus">
+                        <FiTrash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
         </div>

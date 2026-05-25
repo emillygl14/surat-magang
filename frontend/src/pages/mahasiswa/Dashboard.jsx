@@ -47,17 +47,17 @@ export default function Dashboard() {
 
   return (
     <>
-      <header className="bg-white border-b border-gray-200 px-8 h-16 flex items-center justify-between shrink-0">
-        <h1 className="text-xl font-bold text-gray-900">Dashboard Mahasiswa</h1>
-        <div className="flex items-center gap-3">
-          <div className="text-right leading-tight">
+      <header className="bg-white border-b border-gray-200 px-4 sm:px-8 h-14 sm:h-16 flex items-center justify-between shrink-0">
+        <h1 className="text-base sm:text-xl font-bold text-gray-900">Dashboard Mahasiswa</h1>
+        <div className="flex items-center gap-2">
+          <div className="hidden sm:block text-right leading-tight">
             <p className="text-sm font-semibold text-gray-900">{user?.nama}</p>
             <p className="text-[10px] uppercase tracking-wider font-bold text-gray-400">{user?.nim}</p>
           </div>
           <img 
             src={user?.fotoProfil ? `${FILE_URL}${user.fotoProfil}` : `https://ui-avatars.com/api/?name=${user?.nama}&background=0D8ABC&color=fff`} 
             alt="Profile" 
-            className="w-9 h-9 rounded-full object-cover border border-gray-100"
+            className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover border border-gray-100"
             onError={(e) => {
               e.target.onerror = null;
               e.target.src = `https://ui-avatars.com/api/?name=${user?.nama}&background=0D8ABC&color=fff`;
@@ -66,25 +66,26 @@ export default function Dashboard() {
         </div>
       </header>
 
-      <main className="flex-1 p-8">
-        <div className="mb-6">
+      <main className="flex-1 p-4 sm:p-8">
+        <div className="mb-4 sm:mb-6">
           <p className="text-gray-500 text-sm">Selamat datang,</p>
-          <h2 className="text-2xl font-bold text-gray-900">{user?.nama}</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900">{user?.nama}</h2>
           <p className="text-gray-500 text-sm mt-0.5">Kelola pengajuan surat magang Anda dengan mudah dan cepat.</p>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <StatCard label="Total Pengajuan" value={counts.total} desc="Semua pengajuan surat" icon={<BsFileEarmarkText className="w-6 h-6 text-blue-600" />} iconBg="bg-blue-50" />
-          <StatCard label="Menunggu" value={counts.menunggu} desc="Menunggu verifikasi" icon={<BsClock className="w-6 h-6 text-yellow-600" />} iconBg="bg-yellow-50" />
-          <StatCard label="Diproses" value={counts.diproses} desc="Sedang dikerjakan" icon={<BsClock className="w-6 h-6 text-blue-600" />} iconBg="bg-blue-50" />
-          <StatCard label="Selesai" value={counts.selesai} desc="Surat siap diunduh" icon={<BsCheckCircle className="w-6 h-6 text-green-600" />} iconBg="bg-green-50" />
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
+          <StatCard label="Total Pengajuan" value={counts.total} desc="Semua pengajuan surat" icon={<BsFileEarmarkText className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />} iconBg="bg-blue-50" />
+          <StatCard label="Menunggu" value={counts.menunggu} desc="Menunggu verifikasi" icon={<BsClock className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-600" />} iconBg="bg-yellow-50" />
+          <StatCard label="Diproses" value={counts.diproses} desc="Sedang dikerjakan" icon={<BsClock className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />} iconBg="bg-blue-50" />
+          <StatCard label="Selesai" value={counts.selesai} desc="Surat siap diunduh" icon={<BsCheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />} iconBg="bg-green-50" />
         </div>
 
         <div className="bg-white border border-gray-200 rounded-2xl shadow-sm">
-          <div className="px-6 py-4 border-b border-gray-100">
+          <div className="px-4 sm:px-6 py-4 border-b border-gray-100">
             <h3 className="font-bold text-gray-900">Pengajuan Terbaru</h3>
           </div>
-          <div className="overflow-x-auto">
+          {/* Desktop table */}
+          <div className="hidden sm:block overflow-x-auto">
             {recent.length === 0 ? (
               <div className="py-16 text-center text-gray-400 text-sm">Belum ada pengajuan surat.</div>
             ) : (
@@ -112,6 +113,26 @@ export default function Dashboard() {
                   ))}
                 </tbody>
               </table>
+            )}
+          </div>
+          {/* Mobile card list */}
+          <div className="sm:hidden">
+            {recent.length === 0 ? (
+              <div className="py-12 text-center text-gray-400 text-sm">Belum ada pengajuan surat.</div>
+            ) : (
+              <div className="divide-y divide-gray-50">
+                {recent.map((p) => (
+                  <div key={p.id} className="px-4 py-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="text-sm font-medium text-gray-900 leading-snug">{p.jenisSurat}</p>
+                      <span className={`shrink-0 text-xs px-2 py-0.5 rounded-full font-medium ${STATUS_BADGE[p.status]}`}>
+                        {STATUS_LABEL[p.status]}
+                      </span>
+                    </div>
+                    <p className="text-xs text-gray-400 mt-1">{formatDate(p.createdAt)}</p>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
         </div>

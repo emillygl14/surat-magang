@@ -50,17 +50,17 @@ export default function RiwayatPengajuan() {
 
   return (
     <>
-      <header className="bg-white border-b border-gray-200 px-8 h-16 flex items-center justify-between shrink-0">
-        <h1 className="text-xl font-bold text-gray-900">Riwayat Pengajuan</h1>
-        <div className="flex items-center gap-3">
-          <div className="text-right leading-tight">
+      <header className="bg-white border-b border-gray-200 px-4 sm:px-8 h-14 sm:h-16 flex items-center justify-between shrink-0">
+        <h1 className="text-base sm:text-xl font-bold text-gray-900">Riwayat Pengajuan</h1>
+        <div className="flex items-center gap-2">
+          <div className="hidden sm:block text-right leading-tight">
             <p className="text-sm font-semibold text-gray-900">{user?.nama}</p>
             <p className="text-[10px] uppercase tracking-wider font-bold text-gray-400">{user?.nim}</p>
           </div>
           <img 
             src={user?.fotoProfil ? `${FILE_URL}${user.fotoProfil}` : `https://ui-avatars.com/api/?name=${user?.nama}&background=0D8ABC&color=fff`} 
             alt="Profile" 
-            className="w-9 h-9 rounded-full object-cover border border-gray-100"
+            className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover border border-gray-100"
             onError={(e) => {
               e.target.onerror = null;
               e.target.src = `https://ui-avatars.com/api/?name=${user?.nama}&background=0D8ABC&color=fff`;
@@ -69,13 +69,14 @@ export default function RiwayatPengajuan() {
         </div>
       </header>
 
-      <main className="flex-1 p-8">
+      <main className="flex-1 p-4 sm:p-8">
         <div className="bg-white border border-gray-200 rounded-2xl shadow-sm">
-          <div className="px-6 py-4 border-b border-gray-100">
+          <div className="px-4 sm:px-6 py-4 border-b border-gray-100">
             <h3 className="font-bold text-gray-900">Semua Pengajuan Anda</h3>
           </div>
 
-          <div className="overflow-x-auto">
+          {/* Desktop Table */}
+          <div className="hidden sm:block overflow-x-auto">
             {pengajuan.length === 0 ? (
               <div className="py-16 text-center text-gray-400 text-sm">Belum ada riwayat pengajuan.</div>
             ) : (
@@ -116,6 +117,37 @@ export default function RiwayatPengajuan() {
                   ))}
                 </tbody>
               </table>
+            )}
+          </div>
+
+          {/* Mobile Card List */}
+          <div className="sm:hidden">
+            {pengajuan.length === 0 ? (
+              <div className="py-12 text-center text-gray-400 text-sm">Belum ada riwayat pengajuan.</div>
+            ) : (
+              <div className="divide-y divide-gray-50">
+                {pengajuan.map((p) => (
+                  <div key={p.id} className="px-4 py-3.5">
+                    <div className="flex items-start justify-between gap-2 mb-1">
+                      <p className="text-sm font-semibold text-gray-900 leading-snug">{p.jenisSurat}</p>
+                      <span className={`shrink-0 text-xs px-2 py-0.5 rounded-full font-medium ${STATUS_BADGE[p.status]}`}>
+                        {STATUS_LABEL[p.status]}
+                      </span>
+                    </div>
+                    <p className="text-xs text-gray-400 mb-2.5">{formatDate(p.createdAt)}</p>
+                    <div className="flex items-center gap-3">
+                      <button onClick={() => setViewItem(p)} className="flex items-center gap-1.5 text-xs font-medium text-blue-600 hover:text-blue-800 transition-colors">
+                        <FiEye className="w-3.5 h-3.5" /> Lihat Detail
+                      </button>
+                      {p.status === "PENDING" && (
+                        <button onClick={() => handleDelete(p.id)} className="flex items-center gap-1.5 text-xs font-medium text-red-500 hover:text-red-700 transition-colors">
+                          <FiX className="w-3.5 h-3.5" /> Hapus
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
         </div>
