@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { FiEye, FiX } from "react-icons/fi";
+import { FiEye, FiX, FiClock } from "react-icons/fi";
 import { useAuth } from "../../context/AuthContext";
 import api, { FILE_URL } from "../../services/api";
+import toast from "react-hot-toast";
 
 const STATUS_BADGE = {
   PENDING: "bg-yellow-100 text-yellow-700 border border-yellow-200",
   PROSES: "bg-blue-100 text-blue-700 border border-blue-200",
   SELESAI: "bg-green-100 text-green-700 border border-green-200",
-  DITOLAK: "bg-red-100 text-red-600 border border-red-200",
+  DITOLAK: "bg-red-100 text-red-700 border border-red-200",
 };
 const STATUS_LABEL = {
   PENDING: "Menunggu Verifikasi",
@@ -40,9 +41,10 @@ export default function RiwayatPengajuan() {
     if (!window.confirm("Yakin ingin menghapus pengajuan ini?")) return;
     try {
       await api.delete(`/pengajuan/${id}`);
+      toast.success("Pengajuan berhasil dihapus");
       fetchData();
     } catch (err) {
-      alert(err.response?.data?.message || "Gagal menghapus");
+      toast.error(err.response?.data?.message || "Gagal menghapus pengajuan");
     }
   };
 
@@ -183,6 +185,31 @@ export default function RiwayatPengajuan() {
                   </a>
                 </div>
               )}
+
+              {/* Riwayat Sederhana */}
+              <div className="mt-6 pt-5 border-t border-gray-100">
+                <h4 className="text-xs font-bold text-gray-900 mb-3 uppercase tracking-wider flex items-center gap-2">
+                  <FiClock className="w-3.5 h-3.5" /> Riwayat Status
+                </h4>
+                <div className="space-y-3">
+                  <div className="flex gap-3 text-sm">
+                    <div className="w-2 h-2 rounded-full bg-blue-500 mt-1.5 shrink-0" />
+                    <div>
+                      <p className="font-medium text-gray-900 leading-none">Pengajuan Dibuat</p>
+                      <p className="text-xs text-gray-500 mt-1">{formatDate(viewItem.createdAt)}</p>
+                    </div>
+                  </div>
+                  {viewItem.updatedAt !== viewItem.createdAt && (
+                    <div className="flex gap-3 text-sm">
+                      <div className="w-2 h-2 rounded-full bg-green-500 mt-1.5 shrink-0" />
+                      <div>
+                        <p className="font-medium text-gray-900 leading-none">Terakhir Diperbarui</p>
+                        <p className="text-xs text-gray-500 mt-1">{formatDate(viewItem.updatedAt)}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>

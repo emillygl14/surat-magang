@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { FiEye, FiCheck, FiX } from "react-icons/fi";
+import { FiEye, FiCheck, FiX, FiMoreVertical, FiClock, FiAlertTriangle } from "react-icons/fi";
 import { useAuth } from "../../context/AuthContext";
 import api, { FILE_URL } from "../../services/api";
+import toast from "react-hot-toast";
 
 const STATUS_BADGE = {
   PENDING: "bg-yellow-100 text-yellow-700 border border-yellow-200",
   PROSES: "bg-blue-100 text-blue-700 border border-blue-200",
   SELESAI: "bg-green-100 text-green-700 border border-green-200",
-  DITOLAK: "bg-red-100 text-red-600 border border-red-200",
+  DITOLAK: "bg-red-100 text-red-700 border border-red-200",
 };
 const STATUS_LABEL = {
   PENDING: "Menunggu Verifikasi",
@@ -28,6 +29,14 @@ export default function VerifikasiSurat() {
   const [loading, setLoading] = useState(false);
   const [showRejectForm, setShowRejectForm] = useState(false);
   const [showFinishForm, setShowFinishForm] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState(null); // ID pengajuan untuk dropdown
+
+  // Tutup dropdown jika klik di luar
+  useEffect(() => {
+    const handleClickOutside = () => setOpenDropdown(null);
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
 
   const fetchData = async () => {
     try {
@@ -50,9 +59,10 @@ export default function VerifikasiSurat() {
     formData.append("status", status);
     formData.append("catatan", catatan);
     
+    
     if (status === "DITOLAK") {
-      if (!alasanPenolakan) {
-        alert("Alasan penolakan wajib diisi");
+      if (!alasanPenolakan.trim()) {
+        toast.error("Alasan penolakan wajib diisi");
         setLoading(false);
         return;
       }
@@ -67,11 +77,12 @@ export default function VerifikasiSurat() {
       await api.patch(`/pengajuan/${modal.id}/status`, formData, {
         headers: { "Content-Type": "multipart/form-data" }
       });
+      toast.success("Status pengajuan berhasil diperbarui");
       setModal(null);
       resetForms();
       fetchData();
     } catch (err) {
-      alert(err.response?.data?.message || "Gagal memperbarui status");
+      toast.error(err.response?.data?.message || "Gagal memperbarui status");
     } finally {
       setLoading(false);
     }
@@ -134,9 +145,25 @@ export default function VerifikasiSurat() {
                         </span>
                       </td>
                       <td className="px-6 py-4">
-                        <button onClick={() => { setModal(p); resetForms(); }} className="bg-[#0d1b3e] hover:bg-[#1a2f5e] text-white px-4 py-1.5 rounded-lg font-medium text-xs transition-colors">
-                          Kelola
-                        </button>
+                        <div className="relative" onClick={(e) => e.stopPropagation()}>
+                          <button 
+                            onClick={() => setOpenDropdown(openDropdown === p.id ? null : p.id)} 
+                            className="p-1.5 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors"
+                          >
+                            <FiMoreVertical className="w-5 h-5" />
+                          </button>
+                          
+                          {openDropdown === p.id && (
+                            <div className="absolute right-0 mt-1 w-36 bg-white border border-gray-100 rounded-lg shadow-lg py-1 z-10 animate-in fade-in zoom-in-95 duration-100">
+                              <button 
+                                onClick={() => { setModal(p); resetForms(); setOpenDropdown(null); }} 
+                                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 flex items-center gap-2 transition-colors"
+                              >
+                                <FiEye className="w-4 h-4" /> Kelola
+                              </button>
+                            </div>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -179,20 +206,29 @@ export default function VerifikasiSurat() {
 
             {/* Reject Form */}
             {showRejectForm ? (
-              <div className="space-y-4 mb-5 animate-in fade-in slide-in-from-top-2 duration-200">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Alasan Penolakan <span className="text-red-500">*</span></label>
-                  <textarea
-                    rows={3}
-                    value={alasanPenolakan}
-                    onChange={(e) => setAlasanPenolakan(e.target.value)}
-                    placeholder="Sebutkan alasan mengapa pengajuan ini ditolak..."
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-500 resize-none"
-                  />
+              <div className="mb-5 animate-in fade-in zoom-in-95 duration-200">
+                <div className="bg-red-50 border border-red-100 rounded-xl p-4 mb-4 flex items-start gap-3">
+                  <FiAlertTriangle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="text-sm font-bold text-red-900">Konfirmasi Penolakan</h4>
+                    <p className="text-xs text-red-700 mt-1">Pengajuan yang ditolak akan dikembalikan ke mahasiswa dan tidak dapat diproses lagi.</p>
+                  </div>
                 </div>
-                <div className="flex gap-2">
-                  <button onClick={() => handleUpdateStatus("DITOLAK")} disabled={loading} className="flex-1 bg-red-600 text-white text-sm font-medium py-2 rounded-lg">Konfirmasi Tolak</button>
-                  <button onClick={() => setShowRejectForm(false)} className="flex-1 bg-gray-100 text-gray-700 text-sm font-medium py-2 rounded-lg">Batal</button>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">Alasan Penolakan <span className="text-red-500">*</span></label>
+                    <textarea
+                      rows={3}
+                      value={alasanPenolakan}
+                      onChange={(e) => setAlasanPenolakan(e.target.value)}
+                      placeholder="Sebutkan alasan mengapa pengajuan ini ditolak..."
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-500 resize-none"
+                    />
+                  </div>
+                  <div className="flex gap-2">
+                    <button onClick={() => handleUpdateStatus("DITOLAK")} disabled={loading} className="flex-1 bg-red-600 hover:bg-red-700 text-white text-sm font-medium py-2 rounded-lg transition-colors disabled:opacity-50">Konfirmasi Tolak</button>
+                    <button onClick={() => setShowRejectForm(false)} className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium py-2 rounded-lg transition-colors">Batal</button>
+                  </div>
                 </div>
               </div>
             ) : showFinishForm ? (
@@ -241,6 +277,31 @@ export default function VerifikasiSurat() {
                 </div>
               </div>
             )}
+
+            {/* Riwayat Sederhana */}
+            <div className="mt-6 pt-5 border-t border-gray-100">
+              <h4 className="text-xs font-bold text-gray-900 mb-3 uppercase tracking-wider flex items-center gap-2">
+                <FiClock className="w-3.5 h-3.5" /> Riwayat Status
+              </h4>
+              <div className="space-y-3">
+                <div className="flex gap-3 text-sm">
+                  <div className="w-2 h-2 rounded-full bg-blue-500 mt-1.5 shrink-0" />
+                  <div>
+                    <p className="font-medium text-gray-900 leading-none">Pengajuan Dibuat</p>
+                    <p className="text-xs text-gray-500 mt-1">{formatDate(modal.createdAt)}</p>
+                  </div>
+                </div>
+                {modal.updatedAt !== modal.createdAt && (
+                  <div className="flex gap-3 text-sm">
+                    <div className="w-2 h-2 rounded-full bg-green-500 mt-1.5 shrink-0" />
+                    <div>
+                      <p className="font-medium text-gray-900 leading-none">Terakhir Diperbarui</p>
+                      <p className="text-xs text-gray-500 mt-1">{formatDate(modal.updatedAt)}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       )}

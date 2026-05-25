@@ -25,6 +25,23 @@ const createPengajuan = async (req, res) => {
 
     const filePendukung = req.file ? `/uploads/${req.file.filename}` : null;
 
+    // Validasi Pengajuan Aktif & Duplikat
+    const existingPengajuan = await prisma.pengajuan.findMany({
+      where: { userId: req.user.id },
+    });
+
+    const activePengajuan = existingPengajuan.find(p => ["PENDING", "PROSES"].includes(p.status));
+    if (activePengajuan) {
+      return res.status(400).json({ message: "Anda masih memiliki pengajuan aktif yang sedang menunggu atau diproses." });
+    }
+
+    const duplicatePengajuan = existingPengajuan.find(
+      p => p.namaPerusahaan.toLowerCase() === namaPerusahaan.toLowerCase() && p.jenisSurat === jenisSurat
+    );
+    if (duplicatePengajuan) {
+      return res.status(400).json({ message: "Anda sudah pernah mengajukan surat ini untuk perusahaan tersebut." });
+    }
+
     const pengajuan = await prisma.pengajuan.create({
       data: {
         userId: req.user.id,

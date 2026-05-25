@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import api, { FILE_URL } from "../../services/api";
+import toast from "react-hot-toast";
+import { FiAlertCircle } from "react-icons/fi";
 
 export default function PengajuanSurat() {
   const { user } = useAuth();
@@ -15,33 +17,41 @@ export default function PengajuanSurat() {
   });
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [hasActiveRequest, setHasActiveRequest] = useState(false);
 
   useEffect(() => {
     // Admin jenis surat endpoint can be public or we can just fetch it if token exists
     // Tapi kita butuh endpoint public atau mahasiswa bisa akses jenis surat.
     // Sementara kita hardcode atau fetch dari admin (butuh update route admin/jenis-surat agar bs diakses mahasiswa atau bikin route baru).
     // Let's hardcode first, or we can use a hardcoded fallback if API fails.
-    const fetchJenis = async () => {
+    const fetchInitialData = async () => {
       try {
-        const res = await api.get("/admin/jenis-surat");
-        setJenisList(res.data);
-        if (res.data.length > 0) setForm(f => ({ ...f, jenisSurat: res.data[0].nama }));
+        const resJenis = await api.get("/admin/jenis-surat");
+        setJenisList(resJenis.data);
+        if (resJenis.data.length > 0) setForm(f => ({ ...f, jenisSurat: resJenis.data[0].nama }));
       } catch (err) {
-        // Fallback if mahasiswa cannot access /admin/jenis-surat
         const fallback = ["Surat Permohonan Magang", "Surat Pengantar Magang", "Surat Keterangan Aktif"];
         setJenisList(fallback.map(f => ({ nama: f })));
         setForm(f => ({ ...f, jenisSurat: fallback[0] }));
       }
+
+      try {
+        const resMy = await api.get("/pengajuan/my");
+        const active = resMy.data.some(p => ["PENDING", "PROSES"].includes(p.status));
+        setHasActiveRequest(active);
+      } catch (err) {
+        console.error("Gagal mengambil riwayat pengajuan");
+      }
     };
-    fetchJenis();
+    fetchInitialData();
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    setSuccess("");
+    if (hasActiveRequest) {
+      toast.error("Anda masih memiliki pengajuan aktif!");
+      return;
+    }
     setLoading(true);
 
     const formData = new FormData();
@@ -52,7 +62,7 @@ export default function PengajuanSurat() {
 
     try {
       await api.post("/pengajuan", formData, { headers: { "Content-Type": "multipart/form-data" } });
-      setSuccess("Pengajuan berhasil dikirim!");
+      toast.success("Pengajuan berhasil dikirim!");
       setForm({
         ...form,
         namaPerusahaan: "",
@@ -62,10 +72,10 @@ export default function PengajuanSurat() {
         keperluan: "",
       });
       setFile(null);
-      // Reset file input visually
       document.getElementById('fileUpload').value = "";
+      setHasActiveRequest(true); // Langsung update state setelah berhasil submit
     } catch (err) {
-      setError(err.response?.data?.message || "Gagal mengirim pengajuan");
+      toast.error(err.response?.data?.message || "Gagal mengirim pengajuan");
     } finally {
       setLoading(false);
     }
@@ -88,8 +98,15 @@ export default function PengajuanSurat() {
         <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
           <h3 className="text-lg font-bold text-gray-900 mb-6">Form Pengajuan Surat Magang</h3>
           
-          {success && <div className="mb-5 text-sm text-green-700 bg-green-50 border border-green-200 rounded-lg px-4 py-3">{success}</div>}
-          {error && <div className="mb-5 text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-4 py-3">{error}</div>}
+          {hasActiveRequest && (
+            <div className="mb-6 flex items-start gap-3 bg-yellow-50 border border-yellow-200 text-yellow-800 rounded-xl p-4">
+              <FiAlertCircle className="w-5 h-5 shrink-0 mt-0.5 text-yellow-600" />
+              <div>
+                <h4 className="font-semibold text-sm">Pengajuan Sedang Aktif</h4>
+                <p className="text-xs mt-1">Anda masih memiliki surat pengajuan yang berstatus <strong>Menunggu Verifikasi</strong> atau <strong>Sedang Diproses</strong>. Anda tidak dapat membuat pengajuan baru hingga pengajuan sebelumnya selesai atau ditolak.</p>
+              </div>
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
@@ -136,7 +153,7 @@ export default function PengajuanSurat() {
             </div>
 
             <div className="pt-4">
-              <button type="submit" disabled={loading} className="w-full bg-[#0d1b3e] hover:bg-[#1a2f5e] disabled:opacity-60 text-white font-medium px-5 py-3 rounded-lg transition-colors">
+              <button type="submit" disabled={loading || hasActiveRequest} className="w-full bg-[#0d1b3e] hover:bg-[#1a2f5e] disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium px-5 py-3 rounded-lg transition-colors">
                 {loading ? "Mengirim Pengajuan..." : "Kirim Pengajuan"}
               </button>
             </div>

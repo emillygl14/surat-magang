@@ -5,7 +5,8 @@ import iluJurusan from "../assets/jurusan-elektro.png";
 import { FiInfo, FiBookOpen, FiArrowRight, FiMenu, FiX, FiZap } from "react-icons/fi";
 import { useState, useEffect } from "react";
 
-function Logo({ size = "md" }) {
+function Logo({ size = "md", variant = "light" }) {
+  const textColor = variant === "dark" ? "text-[#0d1b3e]" : "text-white";
   return (
     <div className="flex flex-col leading-none">
       <span
@@ -15,13 +16,13 @@ function Logo({ size = "md" }) {
       </span>
       <div className="flex items-center gap-1">
         <span
-          className={`text-white font-black tracking-tighter ${size === "sm" ? "text-lg" : "text-2xl"}`}
+          className={`${textColor} font-black tracking-tighter ${size === "sm" ? "text-lg" : "text-2xl"}`}
         >
           ELEK
         </span>
         <FiZap className={`${size === "sm" ? "w-4 h-4" : "w-6 h-6"} text-yellow-400 fill-yellow-400 filter drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]`} />
         <span
-          className={`text-white font-black tracking-tighter ${size === "sm" ? "text-lg" : "text-2xl"}`}
+          className={`${textColor} font-black tracking-tighter ${size === "sm" ? "text-lg" : "text-2xl"}`}
         >
           TRO
         </span>
@@ -73,12 +74,11 @@ export default function LandingPage() {
         <div className="relative z-10 flex flex-col h-full">
           {/* Navbar */}
           <nav
-            className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-4 transition-all duration-300 ${
-              isScrolled || isMenuOpen ? "bg-[#0d1b3e] shadow-lg" : "bg-transparent"
-            }`}
+            className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-4 transition-all duration-300 ${isScrolled || isMenuOpen ? "bg-[#0d1b3e] shadow-lg" : "bg-transparent"
+              }`}
           >
             <Logo />
-            
+
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center gap-8">
               <a
@@ -274,9 +274,9 @@ export default function LandingPage() {
       <footer className="py-12 px-8 md:px-16 bg-white border-t border-gray-100">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
           <div>
-            <Logo size="sm" />
+            <Logo size="sm" variant="dark" />
             <p className="text-gray-400 text-xs mt-3">
-              &copy; 2024 Jurusan Teknik Elektro. Politeknik Negeri Manado.
+              &copy; 2026 Jurusan Teknik Elektro. Politeknik Negeri Manado.
             </p>
           </div>
           <div className="flex gap-8 text-gray-400 text-sm font-medium">
